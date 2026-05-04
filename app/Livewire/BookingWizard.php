@@ -147,6 +147,6 @@ class BookingWizard extends Component
 
     public function render()
     {
-        return view('livewire.booking-wizard');
+        return view('livewire.booking-wizard')->extends('pod24.layouts.public');
     }
 }
