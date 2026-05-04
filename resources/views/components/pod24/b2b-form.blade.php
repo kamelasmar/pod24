@@ -14,7 +14,7 @@
                 ['slug' => 'doh', 'name' => 'Department of Health'],
                 ['slug' => 'aldar', 'name' => 'Aldar'],
                 ['slug' => 'adx', 'name' => 'ADX'],
-                ['slug' => 'partner', 'name' => 'Partner'],
+                ['slug' => 'thndr', 'name' => 'Thndr'],
                 ['slug' => 'adnec', 'name' => 'ADNEC Group'],
             ];
 
@@ -33,11 +33,11 @@
                     @if ($client['file'])
                         <img src="{{ asset($client['file']) }}"
                              alt="{{ $client['name'] }}"
-                             class="h-9 md:h-11 w-auto opacity-85 hover:opacity-100 transition-all">
+                             class="h-14 md:h-16 w-auto rounded-md opacity-90 hover:opacity-100 transition-all">
                     @else
                         <div class="text-white/70 hover:text-white transition-all"
                              title="Drop logo at public/images/logos/{{ $client['slug'] }}.svg (or .png)">
-                            <span class="text-xl md:text-2xl font-bold tracking-wider">{{ $client['name'] }}</span>
+                            <span class="text-2xl md:text-3xl font-bold tracking-wider">{{ $client['name'] }}</span>
                         </div>
                     @endif
                 @endforeach
