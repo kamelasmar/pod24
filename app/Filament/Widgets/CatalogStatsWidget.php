@@ -16,6 +16,12 @@ class CatalogStatsWidget extends BaseWidget
             Stat::make('Active facilities', Facility::where('is_active', true)->count()),
             Stat::make('Service tiers', ServiceTier::count()),
             Stat::make('Hour packs (active)', HourPack::where('is_active', true)->count()),
+            \Filament\Widgets\StatsOverviewWidget\Stat::make(
+                'Active blackouts (next 30d)',
+                \App\Modules\Availability\Models\AvailabilityBlackout::where('starts_at', '<=', now()->addDays(30))
+                    ->where('ends_at', '>=', now())
+                    ->count(),
+            ),
         ];
     }
 }
