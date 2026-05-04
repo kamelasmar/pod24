@@ -37,7 +37,8 @@ class HourPackResource extends Resource
             Tables\Columns\TextColumn::make('facility.slug'),
             Tables\Columns\TextColumn::make('name.en')->label('Name'),
             Tables\Columns\TextColumn::make('hours'),
-            Tables\Columns\TextColumn::make('price_aed_cents')->formatStateUsing(fn ($s) => 'AED '.number_format($s / 100, 2)),
+            Tables\Columns\TextColumn::make('price_aed_cents')->label('Price')
+                ->formatStateUsing(fn ($state) => 'AED '.number_format($state / 100, 2)),
             Tables\Columns\TextColumn::make('expiry_days'),
             Tables\Columns\IconColumn::make('is_active')->boolean(),
         ])->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()]);
