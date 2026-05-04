@@ -9,17 +9,17 @@ use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Filament\Resources\Pages\Page;
 
 class PricingMatrix extends Page implements HasForms
 {
     use InteractsWithForms;
+    use InteractsWithRecord;
 
     protected static string $resource = FacilityResource::class;
 
     protected static string $view = 'filament.resources.catalog.facility-resource.pages.pricing-matrix';
-
-    public Facility | int | string | null $record = null;
 
     public array $data = [];
 
