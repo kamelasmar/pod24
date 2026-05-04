@@ -1,17 +1,17 @@
 <section class="py-20 bg-white">
     <div class="max-w-[1200px] mx-auto px-8">
         <div class="mb-12 max-w-[60ch]">
-            <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">What's included</div>
-            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">Everything you need. Nothing you don't.</h2>
+            <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">Service inclusions</div>
+            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">Production support, every session.</h2>
         </div>
         <div class="grid md:grid-cols-3 gap-5">
             @php
                 $items = [
-                    ['title' => 'Trained operator', 'desc' => 'A Pod24 engineer runs audio, video, and monitoring for your entire session.'],
-                    ['title' => 'Broadcast-ready files', 'desc' => 'Individually tracked audio stems and synchronised multi-cam video, delivered within 24 hours.'],
+                    ['title' => 'Trained operator', 'desc' => 'A Pod24 engineer runs cameras, audio, lighting, and live switching for your entire session.'],
+                    ['title' => 'Raw footage on HDD', 'desc' => 'Individually tracked audio stems plus multi-cam video — delivered on an external HDD or shared digitally.'],
                     ['title' => 'Remote guest support', 'desc' => 'Dial in co-hosts or guests from anywhere — studio-grade quality preserved.'],
-                    ['title' => 'Guest headphones & snacks', 'desc' => 'Comfort kit for up to four hosts. Water, coffee, Pod24 merch on request.'],
-                    ['title' => 'Post-production (add-on)', 'desc' => 'Editing, clips, subtitles, cover art, distribution — priced separately in the booking flow.'],
+                    ['title' => 'Guest headphones &amp; snacks', 'desc' => 'Comfort kit for up to four hosts. Water, coffee, Pod24 merch on request.'],
+                    ['title' => 'Post-production (add-on)', 'desc' => 'Editing, highlights, subtitles, jingles, branding — quoted separately at checkout or via the corporate flow.'],
                 ];
             @endphp
             @foreach ($items as $item)

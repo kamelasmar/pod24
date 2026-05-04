@@ -8,6 +8,34 @@
             <p class="text-white/65 text-lg max-w-[55ch]">For conferences, brand launches, corporate offsites, and recurring branded series &mdash; we bring our team and equipment to your venue, plus a full post-production stack: editing, subtitles in English &amp; Arabic, distribution, branding, podcast launch.</p>
         </div>
 
+        {{-- Client logo strip. Drop actual logo SVGs at public/images/logos/{slug}.svg --}}
+        @php
+            $clients = [
+                ['slug' => 'aldar', 'name' => 'Aldar'],
+                ['slug' => 'doh', 'name' => 'DoH'],
+                ['slug' => 'adnec', 'name' => 'ADNEC'],
+            ];
+        @endphp
+        <div class="mb-12 pb-12 border-b border-white/10">
+            <div class="text-xs uppercase tracking-[0.2em] text-white/40 font-bold mb-6">Trusted by</div>
+            <div class="flex flex-wrap gap-x-12 gap-y-6 items-center">
+                @foreach ($clients as $client)
+                    @php $logoPath = public_path("images/logos/{$client['slug']}.svg"); @endphp
+                    @if (file_exists($logoPath))
+                        <img src="{{ asset("images/logos/{$client['slug']}.svg") }}"
+                             alt="{{ $client['name'] }}"
+                             class="h-7 md:h-9 w-auto opacity-80 hover:opacity-100 transition-all">
+                    @else
+                        <div class="text-white/70 hover:text-white transition-all"
+                             title="Drop logo at public/images/logos/{{ $client['slug'] }}.svg">
+                            <span class="text-xl md:text-2xl font-bold tracking-wider">{{ $client['name'] }}</span>
+                        </div>
+                    @endif
+                @endforeach
+                <span class="text-xs text-white/30 italic">+ growing</span>
+            </div>
+        </div>
+
         <div class="grid md:grid-cols-2 gap-12 items-start relative">
             <div>
                 <div class="grid grid-cols-2 gap-4 mb-10">

@@ -5,7 +5,8 @@
             <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">A complete studio at Yas Creative Hub.</h2>
             <p class="text-pod-ink/70 text-lg max-w-[55ch]">Engineered for broadcast audio and multi-camera video. Walk in with your guests, press record, walk out with finished files.</p>
         </div>
-        <div class="grid md:grid-cols-[1.4fr_1fr] gap-12">
+
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-12">
             <div>
                 <div class="aspect-[16/11] rounded relative overflow-hidden flex items-center justify-center text-white/30 text-sm tracking-[0.15em] uppercase" style="background:linear-gradient(135deg,#242E33,#000);">
                     Photo &middot; Pod24 interior / exterior
@@ -17,25 +18,57 @@
                     <div class="aspect-square bg-pod-border-soft rounded"></div>
                 </div>
             </div>
-            <div class="flex flex-col gap-4">
+
+            <div class="space-y-10">
                 @php
-                    $specs = [
-                        ['icon' => '🎙', 'title' => '4× Shure SM7B microphones', 'desc' => 'Broadcast-standard with individual boom arms.'],
-                        ['icon' => '📹', 'title' => '4-camera multi-cam setup', 'desc' => '4K recording, angle switching, HDMI/SDI feeds.'],
-                        ['icon' => '🎛', 'title' => 'Studio-grade audio interface', 'desc' => 'Rodecaster Pro II · isolated tracks per guest.'],
-                        ['icon' => '🌐', 'title' => 'Remote guest support', 'desc' => 'Riverside / Squadcast integration for hybrid recordings.'],
-                        ['icon' => '⚡', 'title' => 'Operator included · No setup, no breakdown', 'desc' => 'Walk in. Press record. Walk out with finished files.'],
+                    $included = [
+                        'Three cameras',
+                        'Three microphones',
+                        'Flexible professional lighting',
+                        'HD/4K video recording',
+                        'Delivery of raw footage on external HDD',
+                    ];
+                    $equipment = [
+                        ['Universal Audio dynamic microphones', 'Broadcast-grade dynamics with neutral colour and tight rejection.'],
+                        ['Collapsible lantern softboxes', 'Even, soft light across every guest position.'],
+                        ['TriCaster system', 'Live multi-cam switching, picture-in-picture, instant replay.'],
+                        ['Multichannel dialogue noise suppressor', 'Real-time noise removal across every channel.'],
                     ];
                 @endphp
-                @foreach ($specs as $spec)
-                    <div class="flex gap-4 py-4 border-b border-pod-border">
-                        <div class="w-9 h-9 rounded-full bg-pod-accent text-pod-ink-deep flex items-center justify-center font-bold text-sm shrink-0">{{ $spec['icon'] }}</div>
-                        <div>
-                            <div class="text-base font-semibold text-pod-ink-deep mb-0.5">{{ $spec['title'] }}</div>
-                            <div class="text-sm text-pod-ink/70">{{ $spec['desc'] }}</div>
-                        </div>
+
+                <div>
+                    <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-5 inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        What's included
                     </div>
-                @endforeach
+                    <ul class="space-y-2.5">
+                        @foreach ($included as $item)
+                            <li class="flex items-start gap-3 text-pod-ink-deep">
+                                <span class="text-pod-accent mt-1" aria-hidden="true">·</span>
+                                <span>{{ $item }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div>
+                    <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-5 inline-flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 16v-2m6-6h2M4 12H2m13.66-5.66l1.41-1.41M4.93 19.07l1.41-1.41m0-11.32L4.93 4.93m12.73 14.14l1.41 1.41"/>
+                        </svg>
+                        Studio-grade equipment
+                    </div>
+                    <div class="space-y-4">
+                        @foreach ($equipment as [$title, $desc])
+                            <div class="border-l-2 border-pod-border pl-4 hover:border-pod-accent transition-all">
+                                <div class="font-bold text-pod-ink-deep">{{ $title }}</div>
+                                <div class="text-sm text-pod-ink/70 leading-relaxed">{{ $desc }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -9,6 +9,7 @@
     <x-pod24.b2b-form />
     <x-pod24.how />
     <x-pod24.use-cases :items="$useCases" />
+    <x-pod24.samples />
     <x-pod24.testimonials :items="$testimonials" />
     <x-pod24.faq :items="$faqItems" />
     <x-pod24.final-cta />
