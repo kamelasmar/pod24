@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('pod24:release-expired-holds')->everyMinute();
+Schedule::command('pod24:expire-hour-packs')->dailyAt('02:00');
