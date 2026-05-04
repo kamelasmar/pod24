@@ -53,6 +53,7 @@ class FacilityResource extends Resource
         return [
             RelationManagers\ServiceTiersRelationManager::class,
             RelationManagers\AvailabilityRulesRelationManager::class,
+            RelationManagers\AvailabilityBlackoutsRelationManager::class,
         ];
     }
 
