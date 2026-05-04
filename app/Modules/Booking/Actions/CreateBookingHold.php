@@ -19,7 +19,7 @@ class CreateBookingHold
     public function execute(
         BookingDraft $draft,
         array $contact,
-        array $address,
+        ?array $address = null,
         ?int $customerId = null,
         ?string $marketingConsentAt = null,
     ): Booking {
@@ -51,7 +51,9 @@ class CreateBookingHold
                 'contact_name' => $contact['name'],
                 'contact_email' => $contact['email'],
                 'contact_phone' => $contact['phone'] ?? null,
-                'address' => $address,
+                // For in-studio bookings the address is the studio's; off-site bookings
+                // can override with the customer's location.
+                'address' => $address ?? $facility->address,
                 'subtotal_aed_cents' => $price->subtotal(),
                 'weekend_markup_aed_cents' => $price->weekend_markup_aed_cents,
                 'after_hours_markup_aed_cents' => $price->after_hours_markup_aed_cents,

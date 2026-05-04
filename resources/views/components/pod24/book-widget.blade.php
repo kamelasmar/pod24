@@ -18,7 +18,7 @@
                     <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-6">Rates (VAT excl.)</div>
                     @php
                         $rates = [
-                            ['name' => 'Hourly', 'sub' => 'Min. 2-hour booking', 'amt' => 'AED 450', 'unit' => '/hr'],
+                            ['name' => 'Hourly', 'sub' => 'Min. 2-hour booking', 'amt' => 'AED 254', 'unit' => '/hr'],
                             ['name' => 'Half-day', 'sub' => '4 hours · best value for interviews', 'amt' => 'AED 1,600', 'unit' => ''],
                             ['name' => 'Full-day', 'sub' => '8 hours · multi-episode shoots', 'amt' => 'AED 2,900', 'unit' => ''],
                             ['name' => 'Multi-day', 'sub' => 'Consecutive days, discounted', 'amt' => 'From AED 2,600', 'unit' => '/day'],
@@ -36,7 +36,7 @@
                         </div>
                     @endforeach
                     <div class="mt-5 text-xs text-white/50 leading-relaxed">
-                        Includes delivery within Abu Dhabi &amp; Dubai, operator, and broadcast-ready files. Post-production add-ons priced separately at checkout.
+                        Includes operator and broadcast-ready files. Sessions take place at Yas Creative Hub, Abu Dhabi. Post-production add-ons priced separately at checkout.
                     </div>
                 </div>
             </div>

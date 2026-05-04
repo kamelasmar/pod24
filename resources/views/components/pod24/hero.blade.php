@@ -11,15 +11,15 @@
         </div>
         <h1 class="text-5xl md:text-7xl leading-none tracking-tight font-bold mb-6 text-white">
             Record your podcast.<br>
-            <em class="not-italic text-pod-accent">We bring the studio.</em>
+            <em class="not-italic text-pod-accent">Walk in. Press record.</em>
         </h1>
         <p class="text-base md:text-lg text-white/75 max-w-[44ch] mx-auto mb-9 leading-relaxed">
-            A broadcast-grade portable podcast pod &mdash; delivered to your location across the UAE, set up by our team, ready to roll.
+            A broadcast-grade studio at Yas Creative Hub, Abu Dhabi. Operator included. Walk out with finished files.
         </p>
         <div class="flex flex-wrap gap-8 justify-center text-sm text-white/65 font-medium">
-            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-pod-accent">From AED 450/hour</span>
+            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-pod-accent">From AED 254/hour</span>
             <span class="inline-flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-pod-accent">Operator included</span>
-            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-pod-accent">Abu Dhabi &middot; Dubai &middot; UAE-wide</span>
+            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1.5 before:h-1.5 before:rounded-full before:bg-pod-accent">Yas Creative Hub, Abu Dhabi</span>
         </div>
     </div>
 

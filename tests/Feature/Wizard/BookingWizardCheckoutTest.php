@@ -12,26 +12,29 @@ beforeEach(function () {
     $this->facility = Facility::where('slug', 'pod24-portable')->first();
     $this->tier = ServiceTier::where('facility_id', $this->facility->id)->first();
 
-    // Replace Stripe with a stub
     $this->app->bind(CreatePaymentIntent::class, fn () => new CreatePaymentIntent(
         fn ($params) => (object) ['id' => 'pi_test', 'client_secret' => 'pi_test_secret']
     ));
 });
 
-it('creates a hold + payment intent on submitContact', function () {
+it('creates a hold + payment intent on submitContact and lands on step 6', function () {
     Livewire::test(BookingWizard::class)
-        ->set('step', 6)
+        ->set('step', 5)
         ->set('serviceTierId', $this->tier->id)
         ->set('packageType', 'hourly')
         ->set('date', '2026-06-08')
         ->set('time', '10:00')
-        ->set('address', ['city' => 'Abu Dhabi', 'country' => 'AE'])
         ->set('contactName', 'Test Guest')
         ->set('contactEmail', 'g@example.com')
         ->call('submitContact')
-        ->assertSet('step', 7)
+        ->assertSet('step', 6)
         ->assertSet('clientSecret', 'pi_test_secret');
 
     expect(Booking::count())->toBe(1);
-    expect(Booking::first()->status->value)->toBe('pending_payment');
+
+    $booking = Booking::first();
+    expect($booking->status->value)->toBe('pending_payment');
+    // Address defaults to the studio's location when none provided.
+    expect($booking->address['building'])->toBe('Yas Creative Hub');
+    expect($booking->address['city'])->toBe('Abu Dhabi');
 });

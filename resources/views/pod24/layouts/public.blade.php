@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Pod24 — A broadcast-grade portable podcast pod')</title>
-    <meta name="description" content="@yield('description', 'Record your podcast — we bring the studio. Pod24 is a broadcast-grade portable podcast studio delivered across the UAE.')">
+    <title>@yield('title', 'Pod24 — Broadcast-grade podcast studio at Yas Creative Hub')</title>
+    <meta name="description" content="@yield('description', 'Record your podcast at Pod24 — a broadcast-grade studio at Yas Creative Hub, Abu Dhabi. Walk in, press record, walk out with finished files.')">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
 </head>
 <body class="font-pod text-pod-ink bg-pod-bg antialiased">
     <div class="bg-pod-ink-deep text-white text-center text-xs tracking-widest py-2 px-6">
-        Pod24 · <strong class="text-pod-accent">portable podcast studio</strong> · delivered UAE-wide
+        Pod24 · <strong class="text-pod-accent">broadcast-grade podcast studio</strong> · Yas Creative Hub, Abu Dhabi
     </div>
 
     <div class="bg-white border-b border-pod-border-soft px-8 py-4 flex justify-between items-center">

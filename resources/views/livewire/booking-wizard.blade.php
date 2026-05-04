@@ -1,5 +1,5 @@
 <div class="container mx-auto max-w-3xl py-12 px-4">
-    <h1 class="text-3xl font-bold mb-8">Book Pod24 — Step {{ $step }} of 7</h1>
+    <h1 class="text-3xl font-bold mb-8">Book Pod24 — Step {{ $step }} of 6</h1>
 
     @if ($step === 2)
         <h2 class="text-xl font-semibold mb-4">Pick a service tier</h2>
@@ -39,16 +39,6 @@
     @endif
 
     @if ($step === 4)
-        <h2 class="text-xl font-semibold mb-4">Where should we deliver?</h2>
-        <input type="text" wire:model="address.city" placeholder="City"
-               class="w-full border p-2 rounded mb-4">
-        <button wire:click="submitAddress" class="bg-pod-accent text-pod-ink-deep px-6 py-3 rounded font-bold">
-            Continue
-        </button>
-        <p class="text-sm text-pod-muted mt-2">Self-serve booking is for Abu Dhabi onsite only. For other UAE cities, we'll route you to a custom quote form.</p>
-    @endif
-
-    @if ($step === 5)
         <h2 class="text-xl font-semibold mb-4">Add-ons (optional)</h2>
         <div class="space-y-2">
             @foreach ($this->addons as $addon)
@@ -61,12 +51,12 @@
                 </label>
             @endforeach
         </div>
-        <button wire:click="$set('step', 6)" class="mt-4 bg-pod-accent text-pod-ink-deep px-6 py-3 rounded font-bold">
+        <button wire:click="$set('step', 5)" class="mt-4 bg-pod-accent text-pod-ink-deep px-6 py-3 rounded font-bold">
             Continue to contact details
         </button>
     @endif
 
-    @if ($step === 6)
+    @if ($step === 5)
         <h2 class="text-xl font-semibold mb-4">Your details</h2>
         <input type="text" wire:model="contactName" placeholder="Full name" class="w-full border p-2 rounded mb-2">
         <input type="email" wire:model="contactEmail" placeholder="Email" class="w-full border p-2 rounded mb-2">
@@ -80,7 +70,7 @@
         </button>
     @endif
 
-    @if ($step === 7)
+    @if ($step === 6)
         <h2 class="text-xl font-semibold mb-4">Payment</h2>
         @if ($clientSecret)
             <div id="stripe-payment-element" data-client-secret="{{ $clientSecret }}" data-booking-ulid="{{ $bookingUlid }}"></div>
@@ -90,8 +80,6 @@
                 const elements = stripe.elements({ clientSecret: '{{ $clientSecret }}' });
                 const paymentElement = elements.create('payment');
                 paymentElement.mount('#stripe-payment-element');
-                // ... in a real flow, attach a submit handler that calls stripe.confirmPayment
-                // and on success redirects to /book/confirmed?ulid={{ $bookingUlid }}
             </script>
         @endif
     @endif

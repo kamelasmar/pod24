@@ -11,6 +11,6 @@ it('seeds 6 FAQs, 3 testimonials, and 4 use cases', function () {
     expect(Testimonial::count())->toBe(3);
     expect(UseCase::count())->toBe(4);
 
-    expect(FaqItem::where('question->en', 'Where in the UAE will Pod24 travel?')->exists())->toBeTrue();
+    expect(FaqItem::where('question->en', 'Where is Pod24 located?')->exists())->toBeTrue();
     expect(UseCase::where('title->en', 'Interview podcasts')->exists())->toBeTrue();
 });

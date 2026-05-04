@@ -13,8 +13,8 @@ class Pod24ContentSeeder extends Seeder
     {
         $faqs = [
             [
-                'question' => 'Where in the UAE will Pod24 travel?',
-                'answer' => 'Standard delivery covers Abu Dhabi and Dubai. For Sharjah, Ajman, RAK, and Al Ain, we add a travel fee at checkout. Venues outside the UAE are handled case-by-case through the brands-and-events form.',
+                'question' => 'Where is Pod24 located?',
+                'answer' => 'Pod24 is at Yas Creative Hub in Abu Dhabi. Sessions take place onsite — drop us your email if you\'d like to visit before booking. For off-site/on-location filming (conferences, corporate offsites), use the on-location filming form.',
             ],
             [
                 'question' => 'Who owns the recordings?',
@@ -58,8 +58,8 @@ class Pod24ContentSeeder extends Seeder
             ],
             [
                 'name' => 'Placeholder Name',
-                'role' => 'Founder · Placeholder Media',
-                'quote' => 'Pod24 showed up at our office in Masdar, set up in 25 minutes, and the sound quality is genuinely better than what we get in most Dubai studios.',
+                'role' => 'Founder · Placeholder Studios',
+                'quote' => 'The studio at Yas Creative Hub is genuinely better than what we get in most Dubai studios. We\'ve recorded five episodes there in a single afternoon.',
             ],
             [
                 'name' => 'Placeholder Name',

@@ -9,6 +9,19 @@ use Carbon\CarbonImmutable;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
+/**
+ * 6-step in-studio booking wizard.
+ *  1. facility (auto-selected when only one is active)
+ *  2. service tier
+ *  3. date + package + time slot
+ *  4. add-ons (optional)
+ *  5. contact + auth
+ *  6. payment (Stripe Payment Element)
+ *
+ * The address step that used to gate non-AD addresses to /quote/offsite was
+ * removed: Pod24 is a fixed studio at Yas Creative Hub. Off-site/remote
+ * filming requests have their own flow at /quote/offsite (Plan 5).
+ */
 class BookingWizard extends Component
 {
     #[Url]
@@ -21,19 +34,18 @@ class BookingWizard extends Component
     public ?string $packageType = 'hourly';
 
     #[Url]
-    public ?string $date = null;       // 'YYYY-MM-DD'
+    public ?string $date = null;
 
     #[Url]
-    public ?string $time = null;       // 'HH:MM'
+    public ?string $time = null;
 
     public ?int $facilityId = null;
-    public array $address = ['city' => '', 'country' => 'AE'];
 
-    public array $selectedAddons = [];   // [['addon_id' => int, 'qty' => int], ...]
+    public array $selectedAddons = [];
     public string $contactName = '';
     public string $contactEmail = '';
     public string $contactPhone = '';
-    public bool $marketingConsent = true;       // pre-checked per spec § 13.2
+    public bool $marketingConsent = true;
     public ?string $clientSecret = null;
     public ?string $bookingUlid = null;
 
@@ -41,8 +53,7 @@ class BookingWizard extends Component
     {
         $this->facilityId = Facility::where('slug', 'pod24-portable')->value('id');
 
-        // If the home-page widget deep-linked us with date+time+tier, ensure the tier
-        // belongs to this facility (security — caller-controlled query param).
+        // Sanitize caller-controlled tier query param.
         if ($this->serviceTierId) {
             $valid = ServiceTier::where('id', $this->serviceTierId)
                 ->where('facility_id', $this->facilityId)
@@ -65,23 +76,6 @@ class BookingWizard extends Component
         $this->date = $date;
         $this->time = $time;
         $this->step = 4;
-    }
-
-    public function submitAddress(): void
-    {
-        $this->validate([
-            'address.city' => 'required|string',
-        ]);
-
-        if (strtolower(trim($this->address['city'])) !== 'abu dhabi') {
-            $this->redirect(route('quote.offsite', [
-                'city' => $this->address['city'],
-                'name' => '', 'email' => '',
-            ]));
-            return;
-        }
-
-        $this->step = 5;
     }
 
     public function getServiceTiersProperty()
@@ -113,7 +107,7 @@ class BookingWizard extends Component
             'contactEmail' => 'required|email',
             'contactPhone' => 'nullable|string',
         ]);
-        $this->step = 7;
+        $this->step = 6;
         $this->createHoldAndPaymentIntent();
     }
 
@@ -123,8 +117,8 @@ class BookingWizard extends Component
             facility_id: $this->facilityId,
             service_tier_id: $this->serviceTierId,
             package_type: $this->packageType,
-            starts_at: \Carbon\CarbonImmutable::parse($this->date . ' ' . $this->time, 'Asia/Dubai'),
-            ends_at: \Carbon\CarbonImmutable::parse($this->date . ' ' . $this->time, 'Asia/Dubai')->addHours($this->packageDuration()),
+            starts_at: CarbonImmutable::parse($this->date . ' ' . $this->time, 'Asia/Dubai'),
+            ends_at: CarbonImmutable::parse($this->date . ' ' . $this->time, 'Asia/Dubai')->addHours($this->packageDuration()),
             addons: $this->selectedAddons,
         );
 
@@ -132,7 +126,7 @@ class BookingWizard extends Component
             $booking = app(\App\Modules\Booking\Actions\CreateBookingHold::class)->execute(
                 draft: $draft,
                 contact: ['name' => $this->contactName, 'email' => $this->contactEmail, 'phone' => $this->contactPhone],
-                address: $this->address,
+                address: null,    // null → CreateBookingHold uses the facility's address (the studio)
                 marketingConsentAt: $this->marketingConsent ? now() : null,
             );
         } catch (\App\Modules\Booking\Exceptions\SlotUnavailable $e) {

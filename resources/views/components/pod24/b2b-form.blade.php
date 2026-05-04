@@ -4,8 +4,8 @@
     <div class="max-w-[1200px] mx-auto px-8 relative">
         <div class="mb-12 max-w-[60ch]">
             <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">For brands &amp; events</div>
-            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-white mb-4">Put Pod24 at the centre of your next activation.</h2>
-            <p class="text-white/65 text-lg max-w-[55ch]">We produce on-site podcasts for conferences, brand launches, and corporate offsites across the UAE and GCC. Your guests in, your episodes out, distributed the same week.</p>
+            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-white mb-4">Bring Pod24 to your event.</h2>
+            <p class="text-white/65 text-lg max-w-[55ch]">For conferences, brand launches, and corporate offsites &mdash; we bring our team and equipment to your venue across the UAE and GCC. Your guests in, your episodes out, distributed the same week.</p>
         </div>
 
         <div class="grid md:grid-cols-2 gap-12 items-start relative">

@@ -24,18 +24,20 @@ it('selectTier moves to step 3 and stores the tier id', function () {
         ->assertSet('serviceTierId', $tier->id);
 });
 
-it('redirects out-of-AD addresses to quote/offsite', function () {
+it('selectSlot moves to step 4 (addons) and stores date+time', function () {
     Livewire::test(BookingWizard::class)
-        ->set('step', 4)
-        ->set('address.city', 'Dubai')
-        ->call('submitAddress')
-        ->assertRedirect();
+        ->call('selectSlot', '2026-06-08', '10:00')
+        ->assertSet('step', 4)
+        ->assertSet('date', '2026-06-08')
+        ->assertSet('time', '10:00');
 });
 
-it('proceeds to step 5 when the address is in Abu Dhabi', function () {
-    Livewire::test(BookingWizard::class)
-        ->set('step', 4)
-        ->set('address.city', 'Abu Dhabi')
-        ->call('submitAddress')
-        ->assertSet('step', 5);
+it('discards a deep-linked tier_id that does not belong to Pod24', function () {
+    $other = Facility::factory()->create();
+    $foreignTier = ServiceTier::factory()->for($other)->create();
+
+    Livewire::withQueryParams(['tier' => $foreignTier->id])
+        ->test(BookingWizard::class)
+        ->assertSet('serviceTierId', null)
+        ->assertSet('step', 2);
 });

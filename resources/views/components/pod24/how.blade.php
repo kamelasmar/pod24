@@ -7,8 +7,8 @@
         <div class="grid md:grid-cols-3 gap-10 mt-12">
             @php
                 $steps = [
-                    ['num' => 'Step 01', 'title' => 'Pick your slot', 'desc' => 'Choose a date, package, and location in the booking calendar below. Hourly, half-day, and full-day options.'],
-                    ['num' => 'Step 02', 'title' => 'We arrive & set up', 'desc' => 'The Pod24 team delivers the studio to your office, venue, or home. Mics tested, cameras calibrated, ready before you walk in.'],
+                    ['num' => 'Step 01', 'title' => 'Pick your slot', 'desc' => 'Choose a date and package in the booking calendar below. Hourly, half-day, and full-day options.'],
+                    ['num' => 'Step 02', 'title' => 'Walk in', 'desc' => 'Show up at Yas Creative Hub. Mics tested, cameras calibrated, ready before you sit down.'],
                     ['num' => 'Step 03', 'title' => 'You press record', 'desc' => 'Focus on your guests. A trained operator handles sound and video. You leave with broadcast-ready files.'],
                 ];
             @endphp

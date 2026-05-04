@@ -3,12 +3,12 @@
      data-sticky-cta>
     <div class="flex items-center gap-5 min-w-0">
         <div class="text-sm font-bold tracking-tight whitespace-nowrap">
-            Pod24 Portable Podcast Studio
+            Pod24 &mdash; Yas Creative Hub
         </div>
         <div class="hidden md:flex gap-5 text-xs text-white/65 font-medium">
-            <span class="text-white font-bold inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">From AED 450/hr</span>
+            <span class="text-white font-bold inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">From AED 254/hr</span>
             <span class="inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">Operator included</span>
-            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">UAE-wide delivery</span>
+            <span class="inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">Yas Creative Hub, Abu Dhabi</span>
         </div>
     </div>
     <div class="flex items-center gap-3 shrink-0">

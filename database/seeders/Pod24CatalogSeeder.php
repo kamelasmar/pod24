@@ -19,9 +19,9 @@ class Pod24CatalogSeeder extends Seeder
         $facility = Facility::updateOrCreate(
             ['slug' => 'pod24-portable'],
             [
-                'name' => ['en' => 'Pod24 Portable Studio'],
-                'description' => ['en' => 'A broadcast-grade portable podcast pod, delivered to your location across Abu Dhabi.'],
-                'address' => ['city' => 'Abu Dhabi', 'country' => 'AE'],
+                'name' => ['en' => 'Pod24'],
+                'description' => ['en' => 'Broadcast-grade podcast studio at Yas Creative Hub, Abu Dhabi. Walk in, press record, walk out with finished files.'],
+                'address' => ['building' => 'Yas Creative Hub', 'city' => 'Abu Dhabi', 'country' => 'AE'],
                 'is_active' => true,
                 'max_concurrent_per_day' => 2,
                 'sort_order' => 0,

@@ -9,7 +9,6 @@
                 $items = [
                     ['title' => 'Trained operator', 'desc' => 'A Pod24 engineer runs audio, video, and monitoring for your entire session.'],
                     ['title' => 'Broadcast-ready files', 'desc' => 'Individually tracked audio stems and synchronised multi-cam video, delivered within 24 hours.'],
-                    ['title' => 'Delivery & setup', 'desc' => 'Within the UAE. We handle transport, installation, and teardown.'],
                     ['title' => 'Remote guest support', 'desc' => 'Dial in co-hosts or guests from anywhere — studio-grade quality preserved.'],
                     ['title' => 'Guest headphones & snacks', 'desc' => 'Comfort kit for up to four hosts. Water, coffee, Pod24 merch on request.'],
                     ['title' => 'Post-production (add-on)', 'desc' => 'Editing, clips, subtitles, cover art, distribution — priced separately in the booking flow.'],

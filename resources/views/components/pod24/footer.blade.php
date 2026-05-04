@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="mt-12 pt-6 border-t border-pod-border-soft text-xs text-pod-muted">
-            &copy; {{ date('Y') }} twofour54. Pod24 portable podcast studio.
+            &copy; {{ date('Y') }} twofour54. Pod24 podcast studio at Yas Creative Hub.
         </div>
     </div>
 </footer>
