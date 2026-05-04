@@ -16,10 +16,8 @@ uses(
     Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in('Feature');
 
-uses(
-    Tests\TestCase::class,
-    Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Unit');
+// Unit tests are pure and do not touch the DB. Anything needing the DB lives in Feature.
+uses(Tests\TestCase::class)->in('Unit');
 
 /*
 |--------------------------------------------------------------------------
