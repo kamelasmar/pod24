@@ -10,24 +10,24 @@ beforeEach(function () {
     $this->facility = Facility::where('slug', 'pod24-portable')->first();
 });
 
-it('mounts at step 1 with the Pod24 facility pre-selected', function () {
+it('mounts at step 1 (service tier) with the Pod24 facility pre-selected', function () {
     Livewire::test(BookingWizard::class)
         ->assertSet('step', 1)
         ->assertSet('facilityId', $this->facility->id);
 });
 
-it('selectTier moves to step 3 and stores the tier id', function () {
+it('selectTier moves to step 2 (date & time)', function () {
     $tier = ServiceTier::where('facility_id', $this->facility->id)->first();
     Livewire::test(BookingWizard::class)
         ->call('selectTier', $tier->id)
-        ->assertSet('step', 3)
+        ->assertSet('step', 2)
         ->assertSet('serviceTierId', $tier->id);
 });
 
-it('selectSlot moves to step 4 (addons) and stores date+time', function () {
+it('selectSlot moves to step 3 (add-ons) and stores date+time', function () {
     Livewire::test(BookingWizard::class)
         ->call('selectSlot', '2026-06-08', '10:00')
-        ->assertSet('step', 4)
+        ->assertSet('step', 3)
         ->assertSet('date', '2026-06-08')
         ->assertSet('time', '10:00');
 });
@@ -39,5 +39,5 @@ it('discards a deep-linked tier_id that does not belong to Pod24', function () {
     Livewire::withQueryParams(['tier' => $foreignTier->id])
         ->test(BookingWizard::class)
         ->assertSet('serviceTierId', null)
-        ->assertSet('step', 2);
+        ->assertSet('step', 1);
 });

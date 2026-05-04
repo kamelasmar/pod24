@@ -80,7 +80,7 @@ class HomeBookingWidget extends Component
             'time' => $this->selectedTime,
             'tier' => $this->selectedTierId,
             'package' => $this->packageType,
-            'step' => 4,
+            'step' => 3,
         ]));
     }
 

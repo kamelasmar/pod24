@@ -17,9 +17,9 @@ beforeEach(function () {
     ));
 });
 
-it('creates a hold + payment intent on submitContact and lands on step 6', function () {
+it('creates a hold + payment intent on submitContact and lands on step 5 (payment)', function () {
     Livewire::test(BookingWizard::class)
-        ->set('step', 5)
+        ->set('step', 4)
         ->set('serviceTierId', $this->tier->id)
         ->set('packageType', 'hourly')
         ->set('date', '2026-06-08')
@@ -27,14 +27,13 @@ it('creates a hold + payment intent on submitContact and lands on step 6', funct
         ->set('contactName', 'Test Guest')
         ->set('contactEmail', 'g@example.com')
         ->call('submitContact')
-        ->assertSet('step', 6)
+        ->assertSet('step', 5)
         ->assertSet('clientSecret', 'pi_test_secret');
 
     expect(Booking::count())->toBe(1);
 
     $booking = Booking::first();
     expect($booking->status->value)->toBe('pending_payment');
-    // Address defaults to the studio's location when none provided.
     expect($booking->address['building'])->toBe('Yas Creative Hub');
     expect($booking->address['city'])->toBe('Abu Dhabi');
 });

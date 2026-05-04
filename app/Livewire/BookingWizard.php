@@ -10,20 +10,22 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 
 /**
- * 6-step in-studio booking wizard.
- *  1. facility (auto-selected when only one is active)
- *  2. service tier
- *  3. date + package + time slot
- *  4. add-ons (optional)
- *  5. contact + auth
- *  6. payment (Stripe Payment Element)
+ * 5-step in-studio booking wizard.
+ *  1. service tier
+ *  2. date + package + time slot
+ *  3. add-ons (optional)
+ *  4. contact + auth
+ *  5. payment (Stripe Payment Element)
  *
- * The address step that used to gate non-AD addresses to /quote/offsite was
- * removed: Pod24 is a fixed studio at Yas Creative Hub. Off-site/remote
- * filming requests have their own flow at /quote/offsite (Plan 5).
+ * Facility is auto-selected in mount() and never shown as a separate step
+ * (only one active facility today). The address step that used to gate
+ * non-AD addresses was removed: Pod24 is a fixed studio at Yas Creative Hub.
+ * Off-site/remote filming requests live at /quote/offsite (Plan 5).
  */
 class BookingWizard extends Component
 {
+    public const TOTAL_STEPS = 5;
+
     #[Url]
     public int $step = 1;
 
@@ -53,14 +55,15 @@ class BookingWizard extends Component
     {
         $this->facilityId = Facility::where('slug', 'pod24-portable')->value('id');
 
-        // Sanitize caller-controlled tier query param.
+        // Sanitize caller-controlled tier query param. If invalid, force back
+        // to step 1 (service tier picker).
         if ($this->serviceTierId) {
             $valid = ServiceTier::where('id', $this->serviceTierId)
                 ->where('facility_id', $this->facilityId)
                 ->exists();
             if (! $valid) {
                 $this->serviceTierId = null;
-                $this->step = 2;
+                $this->step = 1;
             }
         }
     }
@@ -68,14 +71,14 @@ class BookingWizard extends Component
     public function selectTier(int $tierId): void
     {
         $this->serviceTierId = $tierId;
-        $this->step = 3;
+        $this->step = 2;
     }
 
     public function selectSlot(string $date, string $time): void
     {
         $this->date = $date;
         $this->time = $time;
-        $this->step = 4;
+        $this->step = 3;
     }
 
     public function getServiceTiersProperty()
@@ -107,7 +110,7 @@ class BookingWizard extends Component
             'contactEmail' => 'required|email',
             'contactPhone' => 'nullable|string',
         ]);
-        $this->step = 6;
+        $this->step = 5;
         $this->createHoldAndPaymentIntent();
     }
 
@@ -131,7 +134,7 @@ class BookingWizard extends Component
             );
         } catch (\App\Modules\Booking\Exceptions\SlotUnavailable $e) {
             $this->addError('slot', 'That slot was just taken — please pick another time.');
-            $this->step = 3;
+            $this->step = 2;
             return;
         }
 

@@ -1,24 +1,23 @@
 <div class="container mx-auto max-w-2xl py-16 px-4">
     @php
-        $stepLabels = ['Facility', 'Service tier', 'Date & time', 'Add-ons', 'Your details', 'Payment'];
+        $stepLabels = ['Service tier', 'Date & time', 'Add-ons', 'Your details', 'Payment'];
     @endphp
 
-    <x-pod24.wizard-progress :step="$step" :total="6" :labels="$stepLabels" />
+    <x-pod24.wizard-progress :step="$step" :total="5" :labels="$stepLabels" />
 
     <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-2">
-        {{ $stepLabels[$step - 1] }}
+        {{ $stepLabels[$step - 1] ?? '' }}
     </h1>
     <p class="text-pod-muted mb-10">{{ match ($step) {
-        1 => 'One studio, one click.',
-        2 => 'Pick the level of production support you need.',
-        3 => 'Pick a date and time at Yas Creative Hub.',
-        4 => 'Optional extras to layer on top.',
-        5 => 'Where should we send the confirmation?',
-        6 => 'Secure checkout via Stripe.',
+        1 => 'Pick the level of production support you need.',
+        2 => 'Pick a date and time at Yas Creative Hub.',
+        3 => 'Optional extras to layer on top.',
+        4 => 'Where should we send the confirmation?',
+        5 => 'Secure checkout via Stripe.',
         default => '',
     } }}</p>
 
-    @if ($step === 2)
+    @if ($step === 1)
         <div class="space-y-3">
             @foreach ($this->serviceTiers as $tier)
                 <button wire:click="selectTier({{ $tier->id }})"
@@ -36,7 +35,7 @@
         </div>
     @endif
 
-    @if ($step === 3)
+    @if ($step === 2)
         <div class="space-y-6">
             <div>
                 <label for="wizard-date" class="block text-xs uppercase tracking-[0.15em] text-pod-muted font-bold mb-2">Date</label>
@@ -85,7 +84,7 @@
         </div>
     @endif
 
-    @if ($step === 4)
+    @if ($step === 3)
         <div class="space-y-3 mb-8">
             @forelse ($this->addons as $addon)
                 @php $isSelected = collect($selectedAddons)->contains('addon_id', $addon->id); @endphp
@@ -114,14 +113,14 @@
                 <p class="text-pod-muted text-sm">No add-ons available for this facility.</p>
             @endforelse
         </div>
-        <button wire:click="$set('step', 5)"
+        <button wire:click="$set('step', 4)"
                 type="button"
                 class="w-full bg-pod-ink-deep text-white py-4 rounded-full font-bold hover:bg-pod-accent hover:text-pod-ink-deep transition-all cursor-pointer">
             Continue to your details →
         </button>
     @endif
 
-    @if ($step === 5)
+    @if ($step === 4)
         <div class="space-y-4 mb-6">
             <div>
                 <label for="contact-name" class="block text-xs uppercase tracking-[0.15em] text-pod-muted font-bold mb-2">Full name</label>
@@ -166,7 +165,7 @@
         </button>
     @endif
 
-    @if ($step === 6)
+    @if ($step === 5)
         @if ($clientSecret)
             <div class="bg-white border border-pod-border rounded-lg p-6 mb-4">
                 <div id="stripe-payment-element"

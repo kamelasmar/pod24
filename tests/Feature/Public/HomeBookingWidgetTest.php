@@ -35,7 +35,7 @@ it('clears time selection when the date changes', function () {
         ->assertSet('selectedTime', null);
 });
 
-it('redirects to /book step 4 with prefilled query params on continueToCheckout', function () {
+it('redirects to /book step 3 with prefilled query params on continueToCheckout', function () {
     $tier = ServiceTier::where('facility_id', $this->facility->id)->first();
 
     Livewire::test(HomeBookingWidget::class, ['facility' => $this->facility])
