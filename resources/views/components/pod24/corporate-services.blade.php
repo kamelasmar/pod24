@@ -20,10 +20,10 @@
             'services' => [
                 ['Translation + subtitling', '30 min'],
                 ['Translation + subtitling', '1 hour'],
-                ['Subtitles — English', '30 min'],
-                ['Subtitles — English', '1 hour'],
-                ['Subtitles — Arabic', '30 min'],
-                ['Subtitles — Arabic', '1 hour'],
+                ['Subtitles - English', '30 min'],
+                ['Subtitles - English', '1 hour'],
+                ['Subtitles - Arabic', '30 min'],
+                ['Subtitles - Arabic', '1 hour'],
             ],
         ],
         [

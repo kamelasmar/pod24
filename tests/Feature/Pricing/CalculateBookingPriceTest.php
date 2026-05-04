@@ -37,27 +37,27 @@ it('computes hourly base price from facility_pricing × hours', function () {
     expect($breakdown->total())->toBe(80010);
 });
 
-it('uses the half_day fixed price when package_type=half_day', function () {
+it('multiplies the hourly rate by N hours for an 8-hour booking', function () {
     $facility = Facility::factory()->create();
     $tier = ServiceTier::factory()->for($facility)->create();
     FacilityPricing::create([
         'facility_id' => $facility->id,
         'service_tier_id' => $tier->id,
-        'package_type' => 'half_day',
-        'hours' => 4,
-        'price_aed_cents' => 91440,                      // admin-set, NOT 4 × hourly
+        'package_type' => 'hourly',
+        'hours' => 1,
+        'price_aed_cents' => 25400,
     ]);
 
     $draft = new BookingDraft(
         facility_id: $facility->id,
         service_tier_id: $tier->id,
-        package_type: 'half_day',
+        package_type: 'hourly',
         starts_at: CarbonImmutable::parse('2026-06-01 09:00:00', 'Asia/Dubai'),
-        ends_at:   CarbonImmutable::parse('2026-06-01 13:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-01 17:00:00', 'Asia/Dubai'),
     );
 
     $breakdown = app(CalculateBookingPrice::class)->execute($draft);
-    expect($breakdown->base_aed_cents)->toBe(91440);    // fixed, not × hours
+    expect($breakdown->base_aed_cents)->toBe(203200);  // 25400 × 8
 });
 
 it('throws when no pricing row exists for the (facility, tier, package_type) cell', function () {
@@ -149,12 +149,12 @@ it('applies pro-rata weekend markup for hourly booking spanning Fri-Sat midnight
     expect($breakdown->weekend_markup_aed_cents)->toBe(5000);         // 25% × 2 weekend hrs × 10000
 });
 
-it('applies whole-package weekend markup for full-day booking on weekend', function () {
+it('applies pro-rata weekend markup for an 8-hour hourly booking on Saturday', function () {
     $facility = Facility::factory()->create();
     $tier = ServiceTier::factory()->for($facility)->create();
     FacilityPricing::create([
         'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
-        'package_type' => 'full_day', 'hours' => 8, 'price_aed_cents' => 200000,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 25000,
     ]);
     PricingModifier::create([
         'facility_id' => $facility->id, 'type' => 'weekend', 'percentage' => 25,
@@ -163,13 +163,14 @@ it('applies whole-package weekend markup for full-day booking on weekend', funct
     $draft = new BookingDraft(
         facility_id: $facility->id,
         service_tier_id: $tier->id,
-        package_type: 'full_day',
+        package_type: 'hourly',
         starts_at: CarbonImmutable::parse('2026-06-06 09:00:00', 'Asia/Dubai'),  // Saturday
-        ends_at:   CarbonImmutable::parse('2026-06-06 17:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-06 17:00:00', 'Asia/Dubai'),  // 8 hours
     );
 
     $breakdown = app(CalculateBookingPrice::class)->execute($draft);
-    expect($breakdown->weekend_markup_aed_cents)->toBe(50000);        // 25% × 200000
+    expect($breakdown->base_aed_cents)->toBe(200000);                  // 25000 × 8
+    expect($breakdown->weekend_markup_aed_cents)->toBe(50000);         // 25% × 8 × 25000
 });
 
 it('applies after-hours markup for hourly booking starting at 19:00', function () {

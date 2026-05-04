@@ -1,9 +1,9 @@
 <section id="pod" class="py-20 bg-pod-surface">
     <div class="max-w-[1200px] mx-auto px-8">
         <div class="mb-12 max-w-[60ch]">
-            <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">Meet the pod</div>
-            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">A complete studio at Yas Creative Hub.</h2>
-            <p class="text-pod-ink/70 text-lg max-w-[55ch]">Engineered for broadcast audio and multi-camera video. Walk in with your guests, press record, walk out with finished files.</p>
+            <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">Meet the studio</div>
+            <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">Built for video, end to end.</h2>
+            <p class="text-pod-ink/70 text-lg max-w-[55ch]">Three cameras, live multi-cam switching, broadcast lighting, and broadcast audio engineered to disappear. Walk in with your guests, press record, walk out with a finished video podcast.</p>
         </div>
 
         <div class="grid lg:grid-cols-[1.2fr_1fr] gap-12">

@@ -22,6 +22,8 @@ class HomeBookingWidget extends Component
 
     public string $packageType = 'hourly';
 
+    public int $durationHours = 1;
+
     public function mount(Facility $facility): void
     {
         $this->facilityId = $facility->id;
@@ -64,6 +66,12 @@ class HomeBookingWidget extends Component
         $this->selectedTime = null;
     }
 
+    public function setDurationHours(int $hours): void
+    {
+        $this->durationHours = max(1, min(8, $hours));
+        $this->selectedTime = null;
+    }
+
     public function selectTime(string $time): void
     {
         $this->selectedTime = $time;
@@ -80,6 +88,7 @@ class HomeBookingWidget extends Component
             'time' => $this->selectedTime,
             'tier' => $this->selectedTierId,
             'package' => $this->packageType,
+            'hours' => $this->durationHours,
             'step' => 3,
         ]));
     }
@@ -123,10 +132,11 @@ class HomeBookingWidget extends Component
         if (! $this->selectedDate) {
             return [];
         }
+        $duration = $this->packageType === 'multi_day' ? 'multi_day' : $this->durationHours;
         return app(FindAvailableSlots::class)->execute(
             $this->facilityId,
             CarbonImmutable::parse($this->selectedDate, 'Asia/Dubai'),
-            $this->packageType,
+            $duration,
         );
     }
 

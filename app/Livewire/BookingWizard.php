@@ -35,6 +35,9 @@ class BookingWizard extends Component
     #[Url(as: 'package')]
     public ?string $packageType = 'hourly';
 
+    #[Url(as: 'hours')]
+    public int $durationHours = 1;
+
     #[Url]
     public ?string $date = null;
 
@@ -143,11 +146,15 @@ class BookingWizard extends Component
         $this->bookingUlid = $booking->ulid;
     }
 
+    public function setDurationHours(int $hours): void
+    {
+        $this->durationHours = max(1, min(8, $hours));
+        $this->time = null;       // re-pick the slot when duration changes
+    }
+
     private function packageDuration(): int
     {
-        return match ($this->packageType) {
-            'hourly' => 1, 'half_day' => 4, 'full_day' => 8, 'multi_day' => 8,
-        };
+        return $this->packageType === 'hourly' ? $this->durationHours : 8;
     }
 
     public function getAvailableSlotsProperty(): array
@@ -155,10 +162,11 @@ class BookingWizard extends Component
         if (! $this->facilityId || ! $this->date) {
             return [];
         }
+        $duration = $this->packageType === 'multi_day' ? 'multi_day' : $this->durationHours;
         return app(FindAvailableSlots::class)->execute(
             $this->facilityId,
             CarbonImmutable::parse($this->date, 'Asia/Dubai'),
-            $this->packageType,
+            $duration,
         );
     }
 

@@ -56,13 +56,14 @@ it('seeds 7d/3d/0 cancellation tiers', function () {
     expect($tiers[2]->refund_percentage)->toBe(0);
 });
 
-it('seeds pricing matrix for Recording Only tier across all package types', function () {
+it('seeds pricing matrix for Recording Only tier across hourly + multi_day', function () {
     $this->seed(\Database\Seeders\Pod24CatalogSeeder::class);
     $facility = Facility::where('slug', 'pod24-portable')->first();
     $recording = $facility->serviceTiers()->where('name', 'Recording Only')->first();
 
     expect(FacilityPricing::where(['service_tier_id' => $recording->id, 'package_type' => 'hourly'])->first()->price_aed_cents)->toBe(25400);
-    expect(FacilityPricing::where(['service_tier_id' => $recording->id, 'package_type' => 'half_day'])->first()->price_aed_cents)->toBe(91440); // 4h × 254 × 0.9 (10% half-day discount)
+    // multi_day per-day rate = 25400 × 8 × 0.85 × 0.9 = 155448
+    expect(FacilityPricing::where(['service_tier_id' => $recording->id, 'package_type' => 'multi_day'])->first()->price_aed_cents)->toBe(155448);
 });
 
 it('seeds Mon-Sat 09:00-18:00 availability for Pod24', function () {

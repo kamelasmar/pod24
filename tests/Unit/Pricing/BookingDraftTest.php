@@ -22,7 +22,7 @@ it('reports total hours from the time window', function () {
     $draft = new BookingDraft(
         facility_id: 1,
         service_tier_id: 1,
-        package_type: 'half_day',
+        package_type: 'hourly',
         starts_at: CarbonImmutable::parse('2026-06-01 09:00:00', 'Asia/Dubai'),
         ends_at: CarbonImmutable::parse('2026-06-01 13:00:00', 'Asia/Dubai'),
     );

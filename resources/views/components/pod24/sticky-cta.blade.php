@@ -3,7 +3,7 @@
      data-sticky-cta>
     <div class="flex items-center gap-5 min-w-0">
         <div class="text-sm font-bold tracking-tight whitespace-nowrap">
-            Pod24 &mdash; Yas Creative Hub
+            Pod24 - Yas Creative Hub
         </div>
         <div class="hidden md:flex gap-5 text-xs text-white/65 font-medium">
             <span class="text-white font-bold inline-flex items-center gap-2 before:content-[''] before:w-1 before:h-1 before:rounded-full before:bg-pod-accent whitespace-nowrap">From AED 254/hr</span>
@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="flex items-center gap-3 shrink-0">
-        <a href="#brands" class="hidden md:inline-block text-white/80 text-sm font-semibold py-2 border-b border-transparent hover:text-pod-accent hover:border-pod-accent transition-all">Brands &amp; events &rarr;</a>
+        <a href="#brands" class="hidden md:inline-block text-white/80 text-sm font-semibold py-2 border-b border-transparent hover:text-pod-accent hover:border-pod-accent transition-all">Brands & events &rarr;</a>
         <a href="#book" class="bg-pod-accent text-pod-ink-deep px-5 py-3 rounded-full font-bold text-sm inline-flex items-center gap-2 hover:bg-white transition-all">Book your session &rarr;</a>
     </div>
 </div>

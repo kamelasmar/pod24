@@ -8,10 +8,10 @@
             @php
                 $items = [
                     ['title' => 'Trained operator', 'desc' => 'A Pod24 engineer runs cameras, audio, lighting, and live switching for your entire session.'],
-                    ['title' => 'Raw footage on HDD', 'desc' => 'Individually tracked audio stems plus multi-cam video — delivered on an external HDD or shared digitally.'],
-                    ['title' => 'Remote guest support', 'desc' => 'Dial in co-hosts or guests from anywhere — studio-grade quality preserved.'],
-                    ['title' => 'Guest headphones &amp; snacks', 'desc' => 'Comfort kit for up to four hosts. Water, coffee, Pod24 merch on request.'],
-                    ['title' => 'Post-production (add-on)', 'desc' => 'Editing, highlights, subtitles, jingles, branding — quoted separately at checkout or via the corporate flow.'],
+                    ['title' => 'Raw footage on HDD', 'desc' => 'Individually tracked audio stems plus multi-cam video - delivered on an external HDD or shared digitally.'],
+                    ['title' => 'Remote guest support', 'desc' => 'Dial in co-hosts or guests from anywhere - studio-grade quality preserved.'],
+                    ['title' => 'Guest headphones & snacks', 'desc' => 'Comfort kit for up to four hosts. Water, coffee, Pod24 merch on request.'],
+                    ['title' => 'Post-production (add-on)', 'desc' => 'Editing, highlights, subtitles, jingles, branding - quoted separately at checkout or via the corporate flow.'],
                 ];
             @endphp
             @foreach ($items as $item)

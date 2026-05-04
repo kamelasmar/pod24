@@ -43,16 +43,20 @@ class Pod24CatalogSeeder extends Seeder
             );
         }
 
-        // Pricing matrix: hourly = base; half-day = 4h × base × 0.9; full-day = 8h × base × 0.85; multi-day = full-day × 0.9 per day
+        // Pricing matrix: hourly = base × N hours (1-8); multi-day = ~7.2h × base per-day (multi-day discount baked in)
         foreach ($tierModels as $tierName => $tier) {
             $hourly = $tier->base_hourly_rate_aed_cents;
 
             $entries = [
                 ['type' => 'hourly',    'hours' => 1, 'price' => $hourly],
-                ['type' => 'half_day',  'hours' => 4, 'price' => (int) round($hourly * 4 * 0.9)],
-                ['type' => 'full_day',  'hours' => 8, 'price' => (int) round($hourly * 8 * 0.85)],
-                ['type' => 'multi_day', 'hours' => 1, 'price' => (int) round($hourly * 8 * 0.85 * 0.9)], // per-day, additional 10% off full-day
+                ['type' => 'multi_day', 'hours' => 1, 'price' => (int) round($hourly * 8 * 0.85 * 0.9)], // per-day rate
             ];
+
+            // Drop any stale half_day / full_day rows from earlier seeds
+            FacilityPricing::where([
+                'facility_id' => $facility->id,
+                'service_tier_id' => $tier->id,
+            ])->whereIn('package_type', ['half_day', 'full_day'])->delete();
 
             foreach ($entries as $e) {
                 FacilityPricing::updateOrCreate(

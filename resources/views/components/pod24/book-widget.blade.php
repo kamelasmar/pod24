@@ -7,7 +7,7 @@
         <div class="mb-12 max-w-[60ch]">
             <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">Book your session</div>
             <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-white mb-4">Pick a date, pick a package.</h2>
-            <p class="text-white/70 text-lg max-w-[55ch]">Live availability. Secure your slot in under a minute &mdash; we'll handle the rest.</p>
+            <p class="text-white/70 text-lg max-w-[55ch]">Live availability. Secure your slot in under a minute - we'll handle the rest.</p>
         </div>
 
         <div class="grid md:grid-cols-[1.15fr_1fr] gap-12 items-start relative">
@@ -17,26 +17,30 @@
                 <div class="bg-[#242E33] border border-white/10 rounded p-8">
                     <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-6">Rates (VAT excl.)</div>
                     @php
-                        $rates = [
-                            ['name' => 'Hourly', 'sub' => 'Min. 2-hour booking', 'amt' => 'AED 254', 'unit' => '/hr'],
-                            ['name' => 'Half-day', 'sub' => '4 hours · best value for interviews', 'amt' => 'AED 1,600', 'unit' => ''],
-                            ['name' => 'Full-day', 'sub' => '8 hours · multi-episode shoots', 'amt' => 'AED 2,900', 'unit' => ''],
-                            ['name' => 'Multi-day', 'sub' => 'Consecutive days, discounted', 'amt' => 'From AED 2,600', 'unit' => '/day'],
+                        $tiers = $facility->serviceTiers()
+                            ->where('is_active', true)
+                            ->orderBy('sort_order')
+                            ->get();
+                        $tierBlurbs = [
+                            'Recording Only' => 'Audio + multi-cam capture, raw stems on HDD',
+                            'Live Mix' => 'Live multi-cam switching, ready to publish',
+                            'Live Mix + Standard Edit' => 'Switching + same-day standard edit',
+                            'Live Mix + Standard Edit + Live Stream' => 'Switching, edit, plus live broadcast feed',
                         ];
                     @endphp
-                    @foreach ($rates as $i => $rate)
+                    @foreach ($tiers as $tier)
                         <div class="flex justify-between items-baseline py-4 @if(! $loop->last) border-b border-white/10 @endif">
-                            <div>
-                                <div class="text-base font-semibold text-white">{{ $rate['name'] }}</div>
-                                <div class="text-sm text-white/50 mt-0.5">{{ $rate['sub'] }}</div>
+                            <div class="pr-4">
+                                <div class="text-base font-semibold text-white">{{ $tier->name }}</div>
+                                <div class="text-sm text-white/50 mt-0.5">{{ $tierBlurbs[$tier->name] ?? '1 to 8 hours per session' }}</div>
                             </div>
-                            <div class="text-xl font-bold tracking-tight text-pod-accent">
-                                {{ $rate['amt'] }}<span class="text-xs font-medium text-white/50 ml-1">{{ $rate['unit'] }}</span>
+                            <div class="text-xl font-bold tracking-tight text-pod-accent whitespace-nowrap">
+                                AED {{ number_format($tier->base_hourly_rate_aed_cents / 100, 0) }}<span class="text-xs font-medium text-white/50 ml-1">/hr</span>
                             </div>
                         </div>
                     @endforeach
                     <div class="mt-5 text-xs text-white/50 leading-relaxed">
-                        Includes operator and broadcast-ready files. Sessions take place at Yas Creative Hub, Abu Dhabi. Post-production add-ons priced separately at checkout.
+                        Sessions are 1-8 hours per day at Yas Creative Hub, Abu Dhabi. Operator and raw footage included. Multi-day shoots and post-production add-ons priced separately at checkout. For on-location filming, see corporate services.
                     </div>
                 </div>
             </div>

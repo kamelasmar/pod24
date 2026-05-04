@@ -5,14 +5,22 @@ namespace App\Modules\Availability\Actions;
 use App\Modules\Availability\Models\AvailabilityBlackout;
 use App\Modules\Availability\Models\AvailabilityRule;
 use App\Modules\Availability\ValueObjects\Slot;
+use App\Modules\Booking\Enums\BookingStatus;
+use App\Modules\Catalog\Models\Facility;
+use App\Modules\Catalog\Models\FacilityPricing;
 use Carbon\CarbonImmutable;
 
 class FindAvailableSlots
 {
     /**
+     * Return open slot windows of `$durationHours` consecutive hours on `$date`.
+     *
+     * @param  int|string  $duration  Hours wanted (1-8) for `hourly`, OR the literal
+     *                                string `'multi_day'` to find a day's full open
+     *                                window (returned as a single slot).
      * @return Slot[]
      */
-    public function execute(int $facilityId, CarbonImmutable $date, string $packageType): array
+    public function execute(int $facilityId, CarbonImmutable $date, int|string $duration = 1): array
     {
         $rule = AvailabilityRule::where([
             'facility_id' => $facilityId,
@@ -23,22 +31,21 @@ class FindAvailableSlots
             return [];
         }
 
-        $duration = match ($packageType) {
-            'hourly' => 1,
-            'half_day' => 4,
-            'full_day' => 8,
-            'multi_day' => 8,
-            default => throw new \InvalidArgumentException("Unknown package_type {$packageType}"),
-        };
+        $durationHours = is_int($duration)
+            ? max(FacilityPricing::HOURLY_MIN, min(FacilityPricing::HOURLY_MAX, $duration))
+            : $this->fullDayHours($rule);
 
-        $facility = \App\Modules\Catalog\Models\Facility::find($facilityId);
+        if ($durationHours <= 0) {
+            return [];
+        }
+
+        $facility = Facility::find($facilityId);
         $capacity = $facility->max_concurrent_per_day;
-
         $dayStart = $date->startOfDay();
         $dayEnd = $date->endOfDay();
 
         $occupying = \App\Modules\Booking\Models\Booking::where('facility_id', $facilityId)
-            ->whereIn('status', \App\Modules\Booking\Enums\BookingStatus::occupyingValues())
+            ->whereIn('status', BookingStatus::occupyingValues())
             ->where('starts_at', '<', $dayEnd)
             ->where('ends_at', '>', $dayStart)
             ->count();
@@ -59,8 +66,8 @@ class FindAvailableSlots
 
         $slots = [];
         $cursor = $open;
-        while ($cursor->copy()->addHours($duration) <= $close) {
-            $end = $cursor->copy()->addHours($duration);
+        while ($cursor->copy()->addHours($durationHours) <= $close) {
+            $end = $cursor->copy()->addHours($durationHours);
 
             $blocked = $blackouts->contains(function ($bo) use ($cursor, $end) {
                 return $bo->starts_at < $end && $bo->ends_at > $cursor;
@@ -73,5 +80,12 @@ class FindAvailableSlots
         }
 
         return $slots;
+    }
+
+    private function fullDayHours(AvailabilityRule $rule): int
+    {
+        [$oh] = array_map('intval', explode(':', $rule->open_time));
+        [$ch] = array_map('intval', explode(':', $rule->close_time));
+        return max(0, $ch - $oh);
     }
 }

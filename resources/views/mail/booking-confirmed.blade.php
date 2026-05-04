@@ -13,5 +13,5 @@ Your booking reference: **{{ $booking->ulid }}**
 
 We'll see you on the day. Reply to this email if anything changes.
 
-Pod24 — twofour54
+Pod24 - twofour54
 </x-mail::message>

@@ -16,19 +16,17 @@
         @endforeach
     </div>
 
-    {{-- Package type --}}
-    <div class="text-xs uppercase tracking-[0.2em] text-pod-muted font-bold mb-3">2. Package</div>
-    <div class="flex flex-wrap gap-2 mb-6">
-        @foreach (['hourly' => 'Hourly', 'half_day' => 'Half-day (4h)', 'full_day' => 'Full-day (8h)', 'multi_day' => 'Multi-day'] as $value => $label)
-            <button type="button"
-                    wire:click="selectPackage('{{ $value }}')"
+    {{-- Hours --}}
+    <div class="text-xs uppercase tracking-[0.2em] text-pod-muted font-bold mb-3">2. Hours</div>
+    <div class="grid grid-cols-4 sm:grid-cols-8 gap-1.5 mb-6">
+        @foreach (range(1, 8) as $h)
+            <button wire:click="setDurationHours({{ $h }})"
+                    type="button"
                     @class([
-                        'px-3 py-2 rounded-full text-xs font-semibold border transition-all',
-                        'bg-pod-ink-deep text-white border-pod-ink-deep' => $packageType === $value,
-                        'border-pod-border text-pod-ink hover:border-pod-accent' => $packageType !== $value,
-                    ])>
-                {{ $label }}
-            </button>
+                        'py-2 rounded text-xs font-bold transition-all',
+                        'bg-pod-ink-deep text-white' => $durationHours === $h,
+                        'border border-pod-border hover:border-pod-accent text-pod-ink' => $durationHours !== $h,
+                    ])>{{ $h }}h</button>
         @endforeach
     </div>
 
@@ -97,12 +95,12 @@
                 <span class="font-bold">{{ $tier?->name }}</span>
             </div>
             <div class="flex justify-between items-baseline mb-1">
-                <span class="text-pod-muted">Date &amp; time</span>
+                <span class="text-pod-muted">Date & time</span>
                 <span class="font-bold">{{ \Carbon\Carbon::parse($selectedDate)->format('D, M j') }} · {{ $selectedTime }}</span>
             </div>
             <div class="flex justify-between items-baseline">
-                <span class="text-pod-muted">Package</span>
-                <span class="font-bold">{{ ucfirst(str_replace('_', '-', $packageType)) }}</span>
+                <span class="text-pod-muted">Length</span>
+                <span class="font-bold">{{ $durationHours }} hour{{ $durationHours > 1 ? 's' : '' }}</span>
             </div>
         </div>
         <button wire:click="continueToCheckout"

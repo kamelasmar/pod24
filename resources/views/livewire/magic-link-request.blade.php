@@ -20,6 +20,6 @@
     </form>
 
     <p class="text-sm text-pod-muted mt-6 text-center">
-        New to Pod24? <a href="/book" class="text-pod-accent font-bold hover:underline">Book a session</a> — we'll create your account at checkout.
+        New to Pod24? <a href="/book" class="text-pod-accent font-bold hover:underline">Book a session</a> - we'll create your account at checkout.
     </p>
 </section>

@@ -17,7 +17,11 @@ class FacilityPricing extends Model
 
     protected $fillable = ['facility_id', 'service_tier_id', 'package_type', 'hours', 'price_aed_cents'];
 
-    public const PACKAGE_TYPES = ['hourly', 'half_day', 'full_day', 'multi_day'];
+    public const PACKAGE_TYPES = ['hourly', 'multi_day'];
+
+    /** Min/max consecutive hours bookable on a single day for an hourly session. */
+    public const HOURLY_MIN = 1;
+    public const HOURLY_MAX = 8;
 
     protected function casts(): array
     {

@@ -7,5 +7,5 @@ Click the link below to sign in. The link expires in 30 minutes.
 
 If you didn't request this, ignore the email.
 
-Pod24 — twofour54
+Pod24 - twofour54
 </x-mail::message>

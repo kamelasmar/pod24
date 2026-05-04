@@ -3,10 +3,10 @@
 @section('content')
 <section class="container mx-auto py-20 px-4 max-w-5xl">
     <a href="/" class="text-sm text-pod-muted hover:text-pod-ink-deep mb-3 inline-block">← Back to home</a>
-    <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-3">Corporate &amp; on-location</div>
+    <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-3">Corporate & on-location</div>
     <h1 class="text-3xl md:text-5xl font-bold tracking-tight mb-4 max-w-3xl">Production support, end to end.</h1>
     <p class="text-pod-muted text-lg mb-12 max-w-2xl leading-relaxed">
-        For conferences, brand activations, corporate offsites, and recurring branded series — Pod24 handles the studio, the shoot, the edit, the subtitles, and everything in between. Tell us what you're producing and we'll come back with a custom quote within 24 hours.
+        For conferences, brand activations, corporate offsites, and recurring branded series - Pod24 handles the studio, the shoot, the edit, the subtitles, and everything in between. Tell us what you're producing and we'll come back with a custom quote within 24 hours.
     </p>
 
     <div class="bg-pod-surface rounded-lg p-6 md:p-8 mb-16 flex items-start gap-5">
@@ -25,7 +25,7 @@
 
     <div class="mb-16">
         <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-2">Services available.</h2>
-        <p class="text-pod-muted mb-10 max-w-2xl">All services priced by scope and quoted on request. Mix-and-match across packages — nothing is mandatory.</p>
+        <p class="text-pod-muted mb-10 max-w-2xl">All services priced by scope and quoted on request. Mix-and-match across packages - nothing is mandatory.</p>
         <x-pod24.corporate-services />
     </div>
 

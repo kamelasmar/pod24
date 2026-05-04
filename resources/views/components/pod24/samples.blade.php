@@ -3,7 +3,7 @@
         <div class="mb-12 max-w-[60ch]">
             <div class="text-xs uppercase tracking-[0.2em] text-pod-accent font-bold mb-4 inline-flex items-center gap-2 before:content-[''] before:w-6 before:h-0.5 before:bg-pod-accent">Made at Pod24</div>
             <h2 class="text-3xl md:text-5xl leading-tight tracking-tight font-bold text-pod-ink-deep mb-4">Hear what's been recorded.</h2>
-            <p class="text-pod-ink-70 text-lg max-w-[55ch]">A handful of episodes recorded inside Pod24 — across interview, brand-content, and corporate formats. Real audio, real video, real broadcast quality.</p>
+            <p class="text-pod-ink-70 text-lg max-w-[55ch]">A handful of episodes recorded inside Pod24 - across interview, brand-content, and corporate formats. Real audio, real video, real broadcast quality.</p>
         </div>
 
         @php
@@ -44,7 +44,7 @@
 
         <div class="mt-10 text-center">
             <a href="{{ route('book') }}" class="inline-block text-sm text-pod-ink-deep font-bold hover:text-pod-accent transition-all underline underline-offset-4">
-                Be on the next set of samples — book a session →
+                Be on the next set of samples - book a session →
             </a>
         </div>
     </div>

@@ -70,7 +70,6 @@ class CalculateBookingPrice
         return match ($draft->package_type) {
             'hourly' => $row->price_aed_cents * $draft->totalHours(),
             'multi_day' => $row->price_aed_cents * $this->numberOfDays($draft),
-            'half_day', 'full_day' => $row->price_aed_cents,
             default => throw new PricingNotConfigured("Unknown package_type {$draft->package_type}"),
         };
     }

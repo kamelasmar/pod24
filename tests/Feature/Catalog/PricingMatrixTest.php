@@ -22,10 +22,11 @@ it('saves pricing matrix entries', function () {
     \Livewire\Livewire::test(PricingMatrix::class, ['record' => $facility->id])
         ->fillForm([
             "tier_{$tier->id}_hourly" => 25400,
-            "tier_{$tier->id}_half_day" => 90000,
+            "tier_{$tier->id}_multi_day" => 200000,
         ])
         ->call('save');
 
     expect(FacilityPricing::count())->toBe(2);
     expect(FacilityPricing::where('package_type', 'hourly')->first()->price_aed_cents)->toBe(25400);
+    expect(FacilityPricing::where('package_type', 'multi_day')->first()->price_aed_cents)->toBe(200000);
 });
