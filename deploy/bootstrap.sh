@@ -23,17 +23,32 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+echo "==> Forcing IPv4 for apt (Lightsail's IPv6 routing to Launchpad is unreliable)..."
+echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
+
+echo "==> Removing any stale Ondrej PPA (we use Sury instead — Cloudflare-hosted, reliable)..."
+rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-jammy.sources \
+      /etc/apt/sources.list.d/ondrej-ubuntu-php-jammy.list \
+      /etc/apt/sources.list.d/ondrej-php-jammy.list
+
 echo "==> Updating apt cache..."
 apt-get update -y
 
 echo "==> Installing system packages..."
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    software-properties-common ca-certificates curl gnupg unzip git \
+    lsb-release software-properties-common ca-certificates curl gnupg unzip git \
     nginx postgresql postgresql-contrib redis-server \
     certbot python3-certbot-nginx ufw fail2ban
 
+echo "==> Adding Sury PHP repo..."
+mkdir -p /etc/apt/keyrings
+if [ ! -f /etc/apt/keyrings/sury-php.asc ]; then
+    curl -sSLo /etc/apt/keyrings/sury-php.asc https://packages.sury.org/php/apt.gpg
+fi
+echo "deb [signed-by=/etc/apt/keyrings/sury-php.asc] https://packages.sury.org/php/ $(lsb_release -sc) main" \
+    > /etc/apt/sources.list.d/sury-php.list
+
 echo "==> Installing PHP 8.3..."
-add-apt-repository -y ppa:ondrej/php
 apt-get update -y
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
     php8.3 php8.3-fpm php8.3-cli php8.3-pgsql php8.3-redis php8.3-mbstring \
