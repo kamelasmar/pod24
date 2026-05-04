@@ -8,14 +8,21 @@
 
         <div class="grid lg:grid-cols-[1.2fr_1fr] gap-12">
             <div>
-                <div class="aspect-[16/11] rounded relative overflow-hidden flex items-center justify-center text-white/30 text-sm tracking-[0.15em] uppercase" style="background:linear-gradient(135deg,#242E33,#000);">
-                    Photo &middot; Pod24 interior / exterior
+                <div class="aspect-[16/11] rounded-lg relative overflow-hidden">
+                    <img src="{{ asset('images/studio/hero.jpg') }}"
+                         alt="Pod24 studio interior at Yas Creative Hub"
+                         loading="lazy"
+                         class="absolute inset-0 w-full h-full object-cover">
                 </div>
                 <div class="grid grid-cols-4 gap-3 mt-6">
-                    <div class="aspect-square bg-pod-border-soft rounded"></div>
-                    <div class="aspect-square bg-pod-border-soft rounded"></div>
-                    <div class="aspect-square bg-pod-border-soft rounded"></div>
-                    <div class="aspect-square bg-pod-border-soft rounded"></div>
+                    @foreach (['01', '02', '03', '05'] as $n)
+                        <div class="aspect-square rounded-lg overflow-hidden">
+                            <img src="{{ asset("images/studio/thumb-{$n}.jpg") }}"
+                                 alt="Pod24 studio · view {{ $n }}"
+                                 loading="lazy"
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                    @endforeach
                 </div>
             </div>
 

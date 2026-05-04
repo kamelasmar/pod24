@@ -1,11 +1,10 @@
 {{-- Studio status used to live here; moved into the nav. --}}
 
 <section class="relative min-h-[calc(100vh-64px)] bg-black overflow-hidden flex items-center justify-center text-white text-center">
-    <div class="absolute inset-0 flex items-center justify-center" style="background:linear-gradient(135deg,#1C2327 0%,#000 60%,#0a1418 100%);">
-        <span class="text-white/10 text-xs tracking-[0.25em] uppercase">Background video &middot; Pod24 walkthrough</span>
-    </div>
-    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.55) 60%,rgba(0,0,0,0.75) 100%);"></div>
-    <div class="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[700px] pointer-events-none" style="background:radial-gradient(ellipse,rgba(0,185,227,0.22) 0%,transparent 55%);animation:pod-pulse 5s ease-in-out infinite;"></div>
+    <div class="absolute inset-0 bg-cover bg-center"
+         style="background-image:url('{{ asset('images/studio/hero.jpg') }}');"></div>
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0.85) 100%);"></div>
+    <div class="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[900px] h-[700px] pointer-events-none" style="background:radial-gradient(ellipse,rgba(0,185,227,0.18) 0%,transparent 55%);animation:pod-pulse 5s ease-in-out infinite;"></div>
 
     <div class="relative z-10 px-8 py-16 max-w-[960px]">
         <div class="text-[0.72rem] uppercase tracking-[0.25em] text-pod-accent font-bold mb-7 inline-flex items-center gap-3 opacity-0" style="animation:fadeIn 0.6s ease-out 0.1s forwards;">
