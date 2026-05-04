@@ -52,6 +52,7 @@ class FacilityResource extends Resource
     {
         return [
             RelationManagers\ServiceTiersRelationManager::class,
+            RelationManagers\AvailabilityRulesRelationManager::class,
         ];
     }
 
