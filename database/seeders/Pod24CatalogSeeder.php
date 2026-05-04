@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Modules\Availability\Models\AvailabilityRule;
 use App\Modules\Catalog\Models\Addon;
 use App\Modules\Catalog\Models\CancellationPolicy;
 use App\Modules\Catalog\Models\Facility;
@@ -22,6 +23,7 @@ class Pod24CatalogSeeder extends Seeder
                 'description' => ['en' => 'A broadcast-grade portable podcast pod, delivered to your location across Abu Dhabi.'],
                 'address' => ['city' => 'Abu Dhabi', 'country' => 'AE'],
                 'is_active' => true,
+                'max_concurrent_per_day' => 2,
                 'sort_order' => 0,
             ]
         );
@@ -115,6 +117,14 @@ class Pod24CatalogSeeder extends Seeder
                     'expiry_days' => 365,
                     'is_active' => true,
                 ]
+            );
+        }
+
+        // Default availability: Mon-Sat 09:00-18:00 (Sunday closed)
+        foreach ([1, 2, 3, 4, 5, 6] as $dayOfWeek) {
+            AvailabilityRule::updateOrCreate(
+                ['facility_id' => $facility->id, 'day_of_week' => $dayOfWeek],
+                ['open_time' => '09:00', 'close_time' => '18:00']
             );
         }
     }

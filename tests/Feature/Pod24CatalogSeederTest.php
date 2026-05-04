@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Availability\Models\AvailabilityRule;
 use App\Modules\Catalog\Models\CancellationPolicy;
 use App\Modules\Catalog\Models\Facility;
 use App\Modules\Catalog\Models\FacilityPricing;
@@ -62,4 +63,24 @@ it('seeds pricing matrix for Recording Only tier across all package types', func
 
     expect(FacilityPricing::where(['service_tier_id' => $recording->id, 'package_type' => 'hourly'])->first()->price_aed_cents)->toBe(25400);
     expect(FacilityPricing::where(['service_tier_id' => $recording->id, 'package_type' => 'half_day'])->first()->price_aed_cents)->toBe(91440); // 4h × 254 × 0.9 (10% half-day discount)
+});
+
+it('seeds Mon-Sat 09:00-18:00 availability for Pod24', function () {
+    $this->seed(\Database\Seeders\Pod24CatalogSeeder::class);
+    $facility = Facility::where('slug', 'pod24-portable')->first();
+
+    $rules = AvailabilityRule::where('facility_id', $facility->id)->get();
+    expect($rules)->toHaveCount(6);
+
+    foreach ($rules as $rule) {
+        expect($rule->fresh()->open_time)->toBe('09:00:00');
+        expect($rule->fresh()->close_time)->toBe('18:00:00');
+    }
+});
+
+it('seeds max_concurrent_per_day = 2 for Pod24', function () {
+    $this->seed(\Database\Seeders\Pod24CatalogSeeder::class);
+    $facility = Facility::where('slug', 'pod24-portable')->first();
+
+    expect($facility->fresh()->max_concurrent_per_day)->toBe(2);
 });

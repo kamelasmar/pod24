@@ -2,6 +2,8 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Modules\Availability\Models\AvailabilityBlackout;
+use App\Modules\Availability\Models\AvailabilityRule;
 use App\Support\HasModuleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,5 +35,15 @@ class Facility extends Model implements HasMedia
     public function serviceTiers(): HasMany
     {
         return $this->hasMany(ServiceTier::class);
+    }
+
+    public function availabilityRules(): HasMany
+    {
+        return $this->hasMany(AvailabilityRule::class);
+    }
+
+    public function availabilityBlackouts(): HasMany
+    {
+        return $this->hasMany(AvailabilityBlackout::class);
     }
 }
