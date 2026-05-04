@@ -42,11 +42,13 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 
 echo "==> Adding Sury PHP repo..."
 mkdir -p /etc/apt/keyrings
-if [ ! -f /etc/apt/keyrings/sury-php.asc ]; then
-    curl -sSLo /etc/apt/keyrings/sury-php.asc https://packages.sury.org/php/apt.gpg
-fi
-echo "deb [signed-by=/etc/apt/keyrings/sury-php.asc] https://packages.sury.org/php/ $(lsb_release -sc) main" \
+# Always re-fetch and dearmor — saves us from format ambiguity
+curl -fsSL https://packages.sury.org/php/apt.gpg \
+    | gpg --dearmor --yes -o /etc/apt/keyrings/sury-php.gpg
+echo "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
     > /etc/apt/sources.list.d/sury-php.list
+# Clean up any older .asc filename if it lingers from a prior run
+rm -f /etc/apt/keyrings/sury-php.asc
 
 echo "==> Installing PHP 8.3..."
 apt-get update -y
