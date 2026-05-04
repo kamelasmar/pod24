@@ -27,7 +27,7 @@ class FindAvailableSlots
             'hourly' => 1,
             'half_day' => 4,
             'full_day' => 8,
-            'multi_day' => 8,         // multi-day shows as full-day slots; the date-range is selected separately
+            'multi_day' => 8,
             default => throw new \InvalidArgumentException("Unknown package_type {$packageType}"),
         };
 
@@ -35,18 +35,11 @@ class FindAvailableSlots
         [$closeH, $closeM] = array_map('intval', explode(':', $rule->close_time));
         $open = $date->setTime($openH, $openM);
         $close = $date->setTime($closeH, $closeM);
-        $tz = $open->getTimezone();
 
-        // Blackouts are stored as wall-clock timestamps; re-interpret them in the booking's
-        // timezone so comparisons line up regardless of APP_TIMEZONE.
-        $blackouts = AvailabilityBlackout::where('facility_id', $facilityId)->get()
-            ->map(function ($bo) use ($tz) {
-                $start = CarbonImmutable::parse($bo->starts_at->format('Y-m-d H:i:s'), $tz);
-                $end = CarbonImmutable::parse($bo->ends_at->format('Y-m-d H:i:s'), $tz);
-                return ['starts_at' => $start, 'ends_at' => $end];
-            })
-            ->filter(fn ($bo) => $bo['starts_at'] < $close && $bo['ends_at'] > $open)
-            ->values();
+        $blackouts = AvailabilityBlackout::where('facility_id', $facilityId)
+            ->where('starts_at', '<', $close)
+            ->where('ends_at', '>', $open)
+            ->get();
 
         $slots = [];
         $cursor = $open;
@@ -54,7 +47,7 @@ class FindAvailableSlots
             $end = $cursor->copy()->addHours($duration);
 
             $blocked = $blackouts->contains(function ($bo) use ($cursor, $end) {
-                return $bo['starts_at'] < $end && $bo['ends_at'] > $cursor;
+                return $bo->starts_at < $end && $bo->ends_at > $cursor;
             });
 
             if (! $blocked) {
