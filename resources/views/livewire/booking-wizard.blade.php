@@ -47,4 +47,52 @@
         </button>
         <p class="text-sm text-pod-muted mt-2">Self-serve booking is for Abu Dhabi onsite only. For other UAE cities, we'll route you to a custom quote form.</p>
     @endif
+
+    @if ($step === 5)
+        <h2 class="text-xl font-semibold mb-4">Add-ons (optional)</h2>
+        <div class="space-y-2">
+            @foreach ($this->addons as $addon)
+                <label class="flex items-center gap-3 p-3 border rounded">
+                    <input type="checkbox"
+                           wire:click="toggleAddon({{ $addon->id }})"
+                           @checked(collect($selectedAddons)->contains('addon_id', $addon->id))>
+                    <span class="flex-1">{{ $addon->getTranslation('name', 'en') }}</span>
+                    <span class="font-bold">AED {{ number_format($addon->price_aed_cents / 100, 0) }}</span>
+                </label>
+            @endforeach
+        </div>
+        <button wire:click="$set('step', 6)" class="mt-4 bg-pod-accent text-pod-ink-deep px-6 py-3 rounded font-bold">
+            Continue to contact details
+        </button>
+    @endif
+
+    @if ($step === 6)
+        <h2 class="text-xl font-semibold mb-4">Your details</h2>
+        <input type="text" wire:model="contactName" placeholder="Full name" class="w-full border p-2 rounded mb-2">
+        <input type="email" wire:model="contactEmail" placeholder="Email" class="w-full border p-2 rounded mb-2">
+        <input type="tel" wire:model="contactPhone" placeholder="Phone (optional)" class="w-full border p-2 rounded mb-4">
+        <label class="flex items-center gap-2 mb-4">
+            <input type="checkbox" wire:model="marketingConsent">
+            <span class="text-sm">Send me Pod24 updates and offers (you can unsubscribe anytime).</span>
+        </label>
+        <button wire:click="submitContact" class="bg-pod-accent text-pod-ink-deep px-6 py-3 rounded font-bold">
+            Continue to payment
+        </button>
+    @endif
+
+    @if ($step === 7)
+        <h2 class="text-xl font-semibold mb-4">Payment</h2>
+        @if ($clientSecret)
+            <div id="stripe-payment-element" data-client-secret="{{ $clientSecret }}" data-booking-ulid="{{ $bookingUlid }}"></div>
+            <script src="https://js.stripe.com/v3/"></script>
+            <script>
+                const stripe = Stripe('{{ config('stripe.key') }}');
+                const elements = stripe.elements({ clientSecret: '{{ $clientSecret }}' });
+                const paymentElement = elements.create('payment');
+                paymentElement.mount('#stripe-payment-element');
+                // ... in a real flow, attach a submit handler that calls stripe.confirmPayment
+                // and on success redirects to /book/confirmed?ulid={{ $bookingUlid }}
+            </script>
+        @endif
+    @endif
 </div>
