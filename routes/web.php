@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BookingWizard;
 use App\Modules\Catalog\Models\Facility;
 use App\Modules\Content\Models\FaqItem;
 use App\Modules\Content\Models\Testimonial;
@@ -15,6 +16,11 @@ Route::get('/', function () {
         'useCases' => UseCase::where('is_published', true)->orderBy('sort_order')->get(),
     ]);
 })->name('home');
+
+Route::get('/book', BookingWizard::class)->name('book');
+Route::get('/quote/offsite', function () {
+    return view('pod24.quote-offsite');
+})->name('quote.offsite');
 
 Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handle'])
     ->name('stripe.webhook');
