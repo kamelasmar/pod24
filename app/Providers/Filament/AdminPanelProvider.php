@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors(['primary' => Color::hex('#00B9E3')])
             ->discoverResources(in: app_path('Filament/Resources/Catalog'), for: 'App\\Filament\\Resources\\Catalog')
             ->discoverResources(in: app_path('Filament/Resources/Content'), for: 'App\\Filament\\Resources\\Content')
+            ->discoverResources(in: app_path('Filament/Resources/Booking'), for: 'App\\Filament\\Resources\\Booking')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([Pages\Dashboard::class])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
