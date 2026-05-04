@@ -2,8 +2,10 @@
 
 namespace App\Modules\Pricing\Actions;
 
+use App\Modules\Catalog\Models\Addon;
 use App\Modules\Catalog\Models\FacilityPricing;
 use App\Modules\Catalog\Models\PricingModifier;
+use App\Modules\Pricing\Exceptions\InvalidAddonForFacility;
 use App\Modules\Pricing\Exceptions\PricingNotConfigured;
 use App\Modules\Pricing\ValueObjects\BookingDraft;
 use App\Modules\Pricing\ValueObjects\PriceBreakdown;
@@ -18,6 +20,7 @@ class CalculateBookingPrice
             base_aed_cents: $base,
             weekend_markup_aed_cents: $this->weekendMarkup($draft, $base),
             after_hours_markup_aed_cents: $this->afterHoursMarkup($draft, $base),
+            addons_aed_cents: $this->addons($draft),
         );
     }
 
@@ -140,5 +143,30 @@ class CalculateBookingPrice
             $cursor = $cursor->addHour();
         }
         return $count;
+    }
+
+    private function addons(BookingDraft $draft): int
+    {
+        if (empty($draft->addons)) {
+            return 0;
+        }
+
+        $ids = collect($draft->addons)->pluck('addon_id')->all();
+        $rows = Addon::whereIn('id', $ids)->get()->keyBy('id');
+
+        $total = 0;
+        foreach ($draft->addons as $addon) {
+            $row = $rows->get($addon['addon_id']);
+            if (! $row) {
+                throw new InvalidAddonForFacility("Addon {$addon['addon_id']} not found");
+            }
+            if ($row->facility_id !== $draft->facility_id) {
+                throw new InvalidAddonForFacility(
+                    "Addon {$row->id} belongs to facility {$row->facility_id}, expected {$draft->facility_id}"
+                );
+            }
+            $total += $row->price_aed_cents * $addon['qty'];
+        }
+        return $total;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Modules\Catalog\Models\Addon;
 use App\Modules\Catalog\Models\Facility;
 use App\Modules\Catalog\Models\FacilityPricing;
 use App\Modules\Catalog\Models\PricingModifier;
@@ -242,4 +243,49 @@ it('handles after-hours window wrapping midnight', function () {
 
     $breakdown = app(CalculateBookingPrice::class)->execute($draft);
     expect($breakdown->after_hours_markup_aed_cents)->toBe(7500);   // 25% × 3 × 10000
+});
+
+it('sums addon prices × quantity', function () {
+    $facility = Facility::factory()->create();
+    $tier = ServiceTier::factory()->for($facility)->create();
+    FacilityPricing::create([
+        'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 10000,
+    ]);
+    $editing = Addon::factory()->for($facility)->create(['price_aed_cents' => 50000]);
+    $clips = Addon::factory()->for($facility)->create(['price_aed_cents' => 30000]);
+
+    $draft = new BookingDraft(
+        facility_id: $facility->id, service_tier_id: $tier->id, package_type: 'hourly',
+        starts_at: CarbonImmutable::parse('2026-06-08 10:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-08 11:00:00', 'Asia/Dubai'),
+        addons: [
+            ['addon_id' => $editing->id, 'qty' => 1],
+            ['addon_id' => $clips->id,   'qty' => 2],
+        ],
+    );
+
+    $breakdown = app(CalculateBookingPrice::class)->execute($draft);
+    expect($breakdown->addons_aed_cents)->toBe(50000 + 30000 * 2);
+});
+
+it('throws when an addon belongs to a different facility', function () {
+    $facility = Facility::factory()->create();
+    $otherFacility = Facility::factory()->create();
+    $tier = ServiceTier::factory()->for($facility)->create();
+    FacilityPricing::create([
+        'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 10000,
+    ]);
+    $foreign = Addon::factory()->for($otherFacility)->create();
+
+    $draft = new BookingDraft(
+        facility_id: $facility->id, service_tier_id: $tier->id, package_type: 'hourly',
+        starts_at: CarbonImmutable::parse('2026-06-08 10:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-08 11:00:00', 'Asia/Dubai'),
+        addons: [['addon_id' => $foreign->id, 'qty' => 1]],
+    );
+
+    expect(fn () => app(CalculateBookingPrice::class)->execute($draft))
+        ->toThrow(\App\Modules\Pricing\Exceptions\InvalidAddonForFacility::class);
 });
