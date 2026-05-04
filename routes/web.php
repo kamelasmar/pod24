@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BookingConfirmed;
 use App\Livewire\BookingWizard;
 use App\Modules\Catalog\Models\Facility;
 use App\Modules\Content\Models\FaqItem;
@@ -18,6 +19,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/book', BookingWizard::class)->name('book');
+Route::get('/book/confirmed', BookingConfirmed::class)->name('book.confirmed');
 Route::get('/quote/offsite', function () {
     return view('pod24.quote-offsite');
 })->name('quote.offsite');
