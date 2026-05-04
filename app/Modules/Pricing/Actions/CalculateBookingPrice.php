@@ -21,7 +21,35 @@ class CalculateBookingPrice
             weekend_markup_aed_cents: $this->weekendMarkup($draft, $base),
             after_hours_markup_aed_cents: $this->afterHoursMarkup($draft, $base),
             addons_aed_cents: $this->addons($draft),
+            hour_pack_credit_value_aed_cents: $this->hourPackCredit($draft),
         );
+    }
+
+    private function hourPackCredit(BookingDraft $draft): int
+    {
+        if ($draft->requestedPackHours <= 0 || ! $draft->customer_id) {
+            return 0;
+        }
+
+        $balance = app(\App\Modules\Customers\Actions\HourPackBalance::class)
+            ->forCustomer($draft->customer_id, $draft->facility_id);
+
+        $hoursToCredit = min($draft->requestedPackHours, $balance, $draft->totalHours());
+
+        if ($hoursToCredit <= 0) {
+            return 0;
+        }
+
+        $recordingTier = \App\Modules\Catalog\Models\ServiceTier::where([
+            'facility_id' => $draft->facility_id,
+            'name' => 'Recording Only',
+        ])->first();
+
+        if (! $recordingTier) {
+            return 0;
+        }
+
+        return $recordingTier->base_hourly_rate_aed_cents * $hoursToCredit;
     }
 
     private function base(BookingDraft $draft): int

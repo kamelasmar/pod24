@@ -13,6 +13,8 @@ final readonly class BookingDraft
         public CarbonImmutable $starts_at,
         public CarbonImmutable $ends_at,
         public array $addons = [],            // [['addon_id' => int, 'qty' => int], ...]
+        public int $requestedPackHours = 0,   // hours to redeem from customer's pack balance
+        public ?int $customer_id = null,
     ) {}
 
     public function totalHours(): int

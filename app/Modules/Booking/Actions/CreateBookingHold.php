@@ -73,6 +73,17 @@ class CreateBookingHold
                 ]);
             }
 
+            if ($draft->customer_id && $draft->requestedPackHours > 0) {
+                $balance = app(\App\Modules\Customers\Actions\HourPackBalance::class)
+                    ->forCustomer($draft->customer_id, $draft->facility_id);
+                $hoursToRedeem = min($draft->requestedPackHours, $balance, $draft->totalHours());
+                if ($hoursToRedeem > 0) {
+                    $booking->update(['hour_pack_credits_used' => $hoursToRedeem]);
+                    app(\App\Modules\Customers\Actions\RedeemHourPackHours::class)
+                        ->execute($booking, $hoursToRedeem);
+                }
+            }
+
             return $booking;
         });
     }
