@@ -170,14 +170,27 @@
                         paymentElement: null,
                         submitting: false,
                         error: null,
+                        loadStripeJs() {
+                            return new Promise((resolve, reject) => {
+                                if (typeof Stripe !== 'undefined') return resolve(window.Stripe);
+                                const existing = document.querySelector('script[src=&quot;https://js.stripe.com/v3/&quot;]');
+                                if (existing) {
+                                    existing.addEventListener('load', () => resolve(window.Stripe));
+                                    existing.addEventListener('error', () => reject(new Error('Stripe.js failed to load.')));
+                                    return;
+                                }
+                                const tag = document.createElement('script');
+                                tag.src = 'https://js.stripe.com/v3/';
+                                tag.onload = () => resolve(window.Stripe);
+                                tag.onerror = () => reject(new Error('Stripe.js failed to load.'));
+                                document.head.appendChild(tag);
+                            });
+                        },
                         async init() {
-                            // Wait for Stripe.js to be available (it's loaded in the layout, but
-                            // may not be ready yet on first paint).
-                            for (let i = 0; i < 30 && typeof Stripe === 'undefined'; i++) {
-                                await new Promise(r => setTimeout(r, 100));
-                            }
-                            if (typeof Stripe === 'undefined') {
-                                this.error = 'Stripe failed to load. Refresh and try again.';
+                            try {
+                                await this.loadStripeJs();
+                            } catch (e) {
+                                this.error = 'Stripe failed to load. Check your network and refresh.';
                                 return;
                             }
                             this.stripe = Stripe(@js(config('stripe.key')));

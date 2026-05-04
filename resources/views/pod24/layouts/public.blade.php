@@ -12,7 +12,6 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    <script src="https://js.stripe.com/v3/" async></script>
     <style>[x-cloak]{display:none!important}</style>
 </head>
 <body class="font-pod text-pod-ink bg-pod-bg antialiased">
