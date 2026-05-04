@@ -1,0 +1,17 @@
+[Unit]
+Description=Pod24 Laravel queue worker (Redis)
+After=network.target redis.service postgresql.service
+
+[Service]
+Type=simple
+User=pod24
+Group=www-data
+WorkingDirectory=/var/www/pod24
+Restart=always
+RestartSec=5
+ExecStart=/usr/bin/php8.3 artisan queue:work redis --sleep=3 --tries=3 --max-time=3600 --timeout=90
+StandardOutput=append:/var/log/pod24-queue.log
+StandardError=append:/var/log/pod24-queue.log
+
+[Install]
+WantedBy=multi-user.target

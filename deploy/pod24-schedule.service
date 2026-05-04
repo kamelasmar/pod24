@@ -1,0 +1,12 @@
+[Unit]
+Description=Pod24 Laravel scheduler (runs once per minute, fires due tasks)
+After=network.target
+
+[Service]
+Type=oneshot
+User=pod24
+Group=www-data
+WorkingDirectory=/var/www/pod24
+ExecStart=/usr/bin/php8.3 artisan schedule:run
+StandardOutput=append:/var/log/pod24-schedule.log
+StandardError=append:/var/log/pod24-schedule.log
