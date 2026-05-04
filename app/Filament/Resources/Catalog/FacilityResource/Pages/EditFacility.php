@@ -13,6 +13,9 @@ class EditFacility extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            \Filament\Actions\Action::make('pricing')
+                ->label('Edit pricing matrix')
+                ->url(fn () => static::getResource()::getUrl('pricing', ['record' => $this->record])),
             Actions\DeleteAction::make(),
         ];
     }

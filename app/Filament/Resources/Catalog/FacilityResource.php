@@ -61,6 +61,7 @@ class FacilityResource extends Resource
             'index' => Pages\ListFacilities::route('/'),
             'create' => Pages\CreateFacility::route('/create'),
             'edit' => Pages\EditFacility::route('/{record}/edit'),
+            'pricing' => Pages\PricingMatrix::route('/{record}/pricing'),
         ];
     }
 }
