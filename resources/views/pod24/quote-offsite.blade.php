@@ -18,7 +18,7 @@
         <div class="flex-1">
             <h2 class="font-bold text-pod-ink-deep mb-1">Inquiry wizard coming soon.</h2>
             <p class="text-sm text-pod-muted leading-relaxed">
-                In the meantime, email <a href="mailto:hello@pod24.kamelasmar.com" class="text-pod-accent font-bold hover:underline">hello@pod24.kamelasmar.com</a> with your dates, location, scope, and a few lines about the project. We'll respond within 24 hours.
+                In the meantime, email <a href="mailto:pod24@twofour54.com" class="text-pod-accent font-bold hover:underline">pod24@twofour54.com</a> with your dates, location, scope, and a few lines about the project. We'll respond within 24 hours.
             </p>
         </div>
     </div>
@@ -32,9 +32,9 @@
     <div class="bg-pod-ink-deep text-white rounded-lg p-8 md:p-12 text-center">
         <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-3">Have a brief? Let's talk.</h2>
         <p class="text-white/70 mb-6 max-w-xl mx-auto">Tell us your dates, scope, and what success looks like. We'll come back inside 24 hours with a custom proposal.</p>
-        <a href="mailto:hello@pod24.kamelasmar.com"
+        <a href="mailto:pod24@twofour54.com"
            class="inline-block bg-pod-accent text-pod-ink-deep px-8 py-4 rounded-full font-bold hover:bg-white transition-all">
-            Email hello@pod24.kamelasmar.com →
+            Email pod24@twofour54.com →
         </a>
     </div>
 </section>

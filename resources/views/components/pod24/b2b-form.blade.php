@@ -83,7 +83,7 @@
                 <a href="{{ route('quote.offsite') }}" class="block w-full bg-pod-accent text-pod-ink-deep py-4 rounded-full text-center font-bold hover:bg-white transition-all">
                     Browse services & request a quote →
                 </a>
-                <p class="text-white/40 text-xs text-center mt-3">Or email <a href="mailto:hello@pod24.kamelasmar.com" class="underline hover:text-pod-accent">hello@pod24.kamelasmar.com</a></p>
+                <p class="text-white/40 text-xs text-center mt-3">Or email <a href="mailto:pod24@twofour54.com" class="underline hover:text-pod-accent">pod24@twofour54.com</a></p>
             </div>
         </div>
     </div>

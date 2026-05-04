@@ -19,7 +19,7 @@
             <div>
                 <h5 class="text-pod-ink-deep mb-3 text-xs uppercase tracking-[0.15em] font-bold">Contact</h5>
                 <ul class="list-none p-0 m-0 flex flex-col gap-2">
-                    <li><a href="mailto:hello@pod24.kamelasmar.com" class="hover:text-pod-accent-deep">hello@pod24.kamelasmar.com</a></li>
+                    <li><a href="mailto:pod24@twofour54.com" class="hover:text-pod-accent-deep">pod24@twofour54.com</a></li>
                     <li>Yas Creative Hub</li>
                     <li>Abu Dhabi, UAE</li>
                 </ul>
