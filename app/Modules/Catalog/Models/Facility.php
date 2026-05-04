@@ -4,6 +4,7 @@ namespace App\Modules\Catalog\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
 class Facility extends Model
@@ -26,5 +27,10 @@ class Facility extends Model
     protected static function newFactory()
     {
         return \Database\Factories\FacilityFactory::new();
+    }
+
+    public function serviceTiers(): HasMany
+    {
+        return $this->hasMany(ServiceTier::class);
     }
 }
