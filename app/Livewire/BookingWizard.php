@@ -14,11 +14,19 @@ class BookingWizard extends Component
     #[Url]
     public int $step = 1;
 
-    public ?int $facilityId = null;
+    #[Url(as: 'tier')]
     public ?int $serviceTierId = null;
+
+    #[Url(as: 'package')]
     public ?string $packageType = 'hourly';
+
+    #[Url]
     public ?string $date = null;       // 'YYYY-MM-DD'
+
+    #[Url]
     public ?string $time = null;       // 'HH:MM'
+
+    public ?int $facilityId = null;
     public array $address = ['city' => '', 'country' => 'AE'];
 
     public array $selectedAddons = [];   // [['addon_id' => int, 'qty' => int], ...]
@@ -32,6 +40,18 @@ class BookingWizard extends Component
     public function mount(): void
     {
         $this->facilityId = Facility::where('slug', 'pod24-portable')->value('id');
+
+        // If the home-page widget deep-linked us with date+time+tier, ensure the tier
+        // belongs to this facility (security — caller-controlled query param).
+        if ($this->serviceTierId) {
+            $valid = ServiceTier::where('id', $this->serviceTierId)
+                ->where('facility_id', $this->facilityId)
+                ->exists();
+            if (! $valid) {
+                $this->serviceTierId = null;
+                $this->step = 2;
+            }
+        }
     }
 
     public function selectTier(int $tierId): void

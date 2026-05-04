@@ -11,23 +11,7 @@
         </div>
 
         <div class="grid md:grid-cols-[1.15fr_1fr] gap-12 items-start relative">
-            {{-- TODO: replace with Livewire calendar in Phase E --}}
-            <div class="bg-white text-pod-ink rounded p-8">
-                <div class="text-pod-ink-deep font-semibold mb-4">Booking widget</div>
-                <p class="text-sm text-pod-ink/70 mb-6">
-                    Live calendar, package picker, and time-slot selection &mdash; all rendered through our self-serve flow.
-                    Secure your slot for <strong>{{ $facility->getTranslation('name', 'en') }}</strong> in under a minute.
-                </p>
-                <ul class="text-sm text-pod-ink/70 space-y-2 mb-6 list-disc pl-5">
-                    <li>Hourly, half-day, full-day, and multi-day packages</li>
-                    <li>Real-time availability across Abu Dhabi &amp; Dubai</li>
-                    <li>Operator and broadcast-ready files always included</li>
-                </ul>
-                <a href="/book" class="block w-full bg-pod-accent text-pod-ink-deep py-4 rounded-full text-center font-bold text-base hover:bg-pod-accent-deep hover:text-white transition-all">
-                    Continue to booking &rarr;
-                </a>
-                <div class="text-xs text-pod-muted text-center mt-4">Secure checkout via Stripe &middot; capacity locked at confirmation</div>
-            </div>
+            <livewire:home-booking-widget :facility="$facility" />
 
             <div>
                 <div class="bg-[#242E33] border border-white/10 rounded p-8">
