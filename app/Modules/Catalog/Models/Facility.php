@@ -2,6 +2,7 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Support\HasModuleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +10,9 @@ use Spatie\Translatable\HasTranslations;
 
 class Facility extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasModuleFactory, HasTranslations {
+        HasModuleFactory::newFactory insteadof HasFactory;
+    }
 
     protected $fillable = ['slug', 'name', 'description', 'address', 'is_active', 'sort_order'];
 
@@ -22,11 +25,6 @@ class Facility extends Model
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
-    }
-
-    protected static function newFactory()
-    {
-        return \Database\Factories\FacilityFactory::new();
     }
 
     public function serviceTiers(): HasMany

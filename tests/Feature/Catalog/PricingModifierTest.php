@@ -25,5 +25,15 @@ it('creates an after-hours modifier with start/end window', function () {
         'after_hours_end' => '09:00',
     ]);
 
-    expect($mod->after_hours_start)->toBe('18:00:00');
+    expect($mod->fresh()->after_hours_start)->toBe('18:00:00');
+    expect($mod->fresh()->after_hours_end)->toBe('09:00:00');
+});
+
+it('enforces uniqueness on (facility, type)', function () {
+    $facility = Facility::factory()->create();
+
+    PricingModifier::factory()->for($facility)->create(['type' => 'weekend', 'percentage' => 25]);
+
+    expect(fn () => PricingModifier::factory()->for($facility)->create(['type' => 'weekend', 'percentage' => 30]))
+        ->toThrow(\Illuminate\Database\QueryException::class);
 });

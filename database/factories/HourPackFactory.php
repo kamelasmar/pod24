@@ -18,7 +18,7 @@ class HourPackFactory extends Factory
             'name' => ['en' => "{$hours}-Hour Pack"],
             'description' => ['en' => 'Pre-paid recording hours, valid for 12 months.'],
             'hours' => $hours,
-            'price_aed_cents' => $hours * 25400 * 0.9,
+            'price_aed_cents' => intdiv($hours * 25400 * 9, 10),
             'expiry_days' => 365,
             'is_active' => true,
         ];

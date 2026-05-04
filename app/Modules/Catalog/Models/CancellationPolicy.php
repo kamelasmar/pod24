@@ -2,13 +2,16 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Support\HasModuleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CancellationPolicy extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModuleFactory {
+        HasModuleFactory::newFactory insteadof HasFactory;
+    }
 
     protected $fillable = ['facility_id', 'hours_before_min', 'refund_percentage'];
 
@@ -23,10 +26,5 @@ class CancellationPolicy extends Model
     public function facility(): BelongsTo
     {
         return $this->belongsTo(Facility::class);
-    }
-
-    protected static function newFactory()
-    {
-        return \Database\Factories\CancellationPolicyFactory::new();
     }
 }

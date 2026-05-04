@@ -2,13 +2,16 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Support\HasModuleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FacilityPricing extends Model
 {
-    use HasFactory;
+    use HasFactory, HasModuleFactory {
+        HasModuleFactory::newFactory insteadof HasFactory;
+    }
 
     protected $table = 'facility_pricing';
 
@@ -32,10 +35,5 @@ class FacilityPricing extends Model
     public function serviceTier(): BelongsTo
     {
         return $this->belongsTo(ServiceTier::class);
-    }
-
-    protected static function newFactory()
-    {
-        return \Database\Factories\FacilityPricingFactory::new();
     }
 }

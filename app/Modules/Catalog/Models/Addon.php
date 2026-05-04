@@ -2,6 +2,7 @@
 
 namespace App\Modules\Catalog\Models;
 
+use App\Support\HasModuleFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,9 @@ use Spatie\Translatable\HasTranslations;
 
 class Addon extends Model
 {
-    use HasFactory, HasTranslations;
+    use HasFactory, HasModuleFactory, HasTranslations {
+        HasModuleFactory::newFactory insteadof HasFactory;
+    }
 
     protected $fillable = ['facility_id', 'name', 'description', 'price_aed_cents', 'is_active', 'sort_order'];
 
@@ -27,10 +30,5 @@ class Addon extends Model
     public function facility(): BelongsTo
     {
         return $this->belongsTo(Facility::class);
-    }
-
-    protected static function newFactory()
-    {
-        return \Database\Factories\AddonFactory::new();
     }
 }
