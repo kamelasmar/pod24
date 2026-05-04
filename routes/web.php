@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\MagicLinkController;
+use App\Livewire\AccountDashboard;
 use App\Livewire\BookingConfirmed;
 use App\Livewire\BookingWizard;
 use App\Livewire\MagicLinkRequest;
@@ -34,8 +35,7 @@ Route::get('/login/m/{user}', [MagicLinkController::class, 'consume'])
     ->name('login.magic-link.consume');
 Route::post('/logout', function () { auth()->logout(); return redirect('/'); })->name('logout');
 
-// TEMPORARY PLACEHOLDER - Plan 4 Phase C (Task 9) replaces this with the real AccountDashboard Livewire component.
-Route::middleware('auth')->get('/account', fn () => view('placeholder'))->name('account.dashboard');
+Route::get('/account', AccountDashboard::class)->middleware('auth')->name('account.dashboard');
 
 Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handle'])
     ->name('stripe.webhook');
