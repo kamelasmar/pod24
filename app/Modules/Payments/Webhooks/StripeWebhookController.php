@@ -40,6 +40,28 @@ class StripeWebhookController
             }
         }
 
+        if ($event->type === 'checkout.session.completed') {
+            $session = $event->data->object;
+            $customerId = $session->metadata->customer_id ?? null;
+            $packId = $session->metadata->hour_pack_id ?? null;
+            $piId = $session->payment_intent ?? null;
+
+            if ($customerId && $packId) {
+                $pack = \App\Modules\Catalog\Models\HourPack::find($packId);
+                if ($pack) {
+                    \App\Modules\Customers\Models\HourPackTransaction::create([
+                        'customer_id' => (int) $customerId,
+                        'facility_id' => $pack->facility_id,
+                        'hours' => $pack->hours,
+                        'type' => 'purchase',
+                        'stripe_charge_id' => $piId,
+                        'expires_at' => now()->addDays($pack->expiry_days),
+                        'notes' => "Pack purchase: {$pack->getTranslation('name', 'en')}",
+                    ]);
+                }
+            }
+        }
+
         return response()->json(['received' => true]);
     }
 }
