@@ -11,7 +11,7 @@ php artisan key:generate
 brew services start postgresql@16 redis
 createdb pod24
 php artisan migrate --seed
-php artisan pod24:create-admin admin@pod24.local "Admin" changeme123
+php artisan pod24:create-admin admin@pod24.local "Admin" --password=changeme123
 php artisan serve
 ```
 
