@@ -164,19 +164,62 @@
 
         @if ($step === 5)
             @if ($clientSecret)
-                <div class="bg-white border border-pod-border rounded-lg p-6 mb-4">
-                    <div id="stripe-payment-element"
-                         data-client-secret="{{ $clientSecret }}"
-                         data-booking-ulid="{{ $bookingUlid }}"></div>
+                <div x-data="{
+                        stripe: null,
+                        elements: null,
+                        paymentElement: null,
+                        submitting: false,
+                        error: null,
+                        async init() {
+                            // Wait for Stripe.js to be available (it's loaded in the layout, but
+                            // may not be ready yet on first paint).
+                            for (let i = 0; i < 30 && typeof Stripe === 'undefined'; i++) {
+                                await new Promise(r => setTimeout(r, 100));
+                            }
+                            if (typeof Stripe === 'undefined') {
+                                this.error = 'Stripe failed to load. Refresh and try again.';
+                                return;
+                            }
+                            this.stripe = Stripe(@js(config('stripe.key')));
+                            this.elements = this.stripe.elements({
+                                clientSecret: @js($clientSecret),
+                                appearance: { theme: 'night', variables: { colorPrimary: '#00B9E3' } }
+                            });
+                            this.paymentElement = this.elements.create('payment');
+                            this.paymentElement.mount(this.$refs.payment);
+                        },
+                        async pay() {
+                            if (this.submitting) return;
+                            this.submitting = true;
+                            this.error = null;
+                            const result = await this.stripe.confirmPayment({
+                                elements: this.elements,
+                                confirmParams: {
+                                    return_url: @js(route('book.confirmed', ['ulid' => $bookingUlid])),
+                                },
+                            });
+                            if (result.error) {
+                                this.error = result.error.message;
+                                this.submitting = false;
+                            }
+                        }
+                     }"
+                     wire:key="stripe-step-{{ $bookingUlid }}">
+                    <div class="bg-white rounded-lg p-6 mb-4">
+                        <div x-ref="payment"></div>
+                    </div>
+                    <template x-if="error">
+                        <div class="bg-red-500/10 border border-red-400/30 text-red-300 rounded-lg p-3 text-sm mb-4" x-text="error"></div>
+                    </template>
+                    <button type="button"
+                            @click="pay"
+                            :disabled="submitting"
+                            class="w-full bg-pod-accent text-pod-ink-deep py-4 rounded-full font-bold hover:bg-white transition-all cursor-pointer disabled:opacity-60 disabled:cursor-wait">
+                        <span x-show="!submitting">Pay AED <span class="font-mono">{{ number_format(\App\Modules\Booking\Models\Booking::where('ulid', $bookingUlid)->value('total_aed_cents') / 100, 2) }}</span> &rarr;</span>
+                        <span x-show="submitting">Processing…</span>
+                    </button>
+                    <p class="text-xs text-white/50 text-center mt-3">Secured by Stripe · capacity locked at confirmation</p>
                 </div>
-                <p class="text-xs text-white/50 text-center">Secured by Stripe · capacity locked at confirmation</p>
-                <script src="https://js.stripe.com/v3/"></script>
-                <script>
-                    const stripe = Stripe('{{ config('stripe.key') }}');
-                    const elements = stripe.elements({ clientSecret: '{{ $clientSecret }}', appearance: { theme: 'night' } });
-                    const paymentElement = elements.create('payment');
-                    paymentElement.mount('#stripe-payment-element');
-                </script>
             @else
                 <div class="text-white/50 text-sm">Preparing checkout…</div>
             @endif
