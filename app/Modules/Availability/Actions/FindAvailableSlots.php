@@ -31,6 +31,22 @@ class FindAvailableSlots
             default => throw new \InvalidArgumentException("Unknown package_type {$packageType}"),
         };
 
+        $facility = \App\Modules\Catalog\Models\Facility::find($facilityId);
+        $capacity = $facility->max_concurrent_per_day;
+
+        $dayStart = $date->startOfDay();
+        $dayEnd = $date->endOfDay();
+
+        $occupying = \App\Modules\Booking\Models\Booking::where('facility_id', $facilityId)
+            ->whereIn('status', \App\Modules\Booking\Enums\BookingStatus::occupyingValues())
+            ->where('starts_at', '<', $dayEnd)
+            ->where('ends_at', '>', $dayStart)
+            ->count();
+
+        if ($occupying >= $capacity) {
+            return [];
+        }
+
         [$openH, $openM] = array_map('intval', explode(':', $rule->open_time));
         [$closeH, $closeM] = array_map('intval', explode(':', $rule->close_time));
         $open = $date->setTime($openH, $openM);
