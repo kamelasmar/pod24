@@ -51,7 +51,7 @@ class FacilityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ServiceTiersRelationManager::class,
         ];
     }
 
