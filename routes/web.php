@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\MagicLinkController;
 use App\Livewire\AccountDashboard;
 use App\Livewire\BookingConfirmed;
 use App\Livewire\BookingWizard;
+use App\Livewire\CorporateInquiryWizard;
 use App\Livewire\HourPackPurchaseList;
 use App\Livewire\MagicLinkRequest;
 use App\Modules\Catalog\Models\Facility;
@@ -24,9 +25,7 @@ Route::get('/', function () {
 
 Route::get('/book', BookingWizard::class)->name('book');
 Route::get('/book/confirmed', BookingConfirmed::class)->name('book.confirmed');
-Route::get('/quote/offsite', function () {
-    return view('pod24.quote-offsite');
-})->name('quote.offsite');
+Route::get('/quote/offsite', CorporateInquiryWizard::class)->name('quote.offsite');
 
 Route::get('/login', MagicLinkRequest::class)->name('login');
 Route::post('/login/magic-link', [MagicLinkController::class, 'request'])->name('login.magic-link.request');
