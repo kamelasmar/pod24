@@ -14,11 +14,10 @@ class CalculateBookingPrice
     public function execute(BookingDraft $draft): PriceBreakdown
     {
         $base = $this->base($draft);
-        $weekendMarkup = $this->weekendMarkup($draft, $base);
-
         return new PriceBreakdown(
             base_aed_cents: $base,
-            weekend_markup_aed_cents: $weekendMarkup,
+            weekend_markup_aed_cents: $this->weekendMarkup($draft, $base),
+            after_hours_markup_aed_cents: $this->afterHoursMarkup($draft, $base),
         );
     }
 
@@ -89,5 +88,57 @@ class CalculateBookingPrice
             $cursor = $cursor->addHour();
         }
         return $weekend;
+    }
+
+    private function afterHoursMarkup(BookingDraft $draft, int $base): int
+    {
+        $modifier = PricingModifier::where([
+            'facility_id' => $draft->facility_id,
+            'type' => 'after_hours',
+        ])->first();
+
+        if (! $modifier || ! $modifier->after_hours_start || ! $modifier->after_hours_end) {
+            return 0;
+        }
+
+        $afterHoursHours = $this->countAfterHoursHours(
+            $draft->starts_at, $draft->ends_at,
+            $modifier->after_hours_start, $modifier->after_hours_end,
+        );
+
+        if ($afterHoursHours === 0) {
+            return 0;
+        }
+
+        if ($draft->package_type === 'hourly') {
+            $hourlyRate = (int) ($base / $draft->totalHours());
+            return (int) round($hourlyRate * $afterHoursHours * $modifier->percentage / 100);
+        }
+
+        return (int) round($base * $modifier->percentage / 100);
+    }
+
+    private function countAfterHoursHours(
+        CarbonImmutable $start, CarbonImmutable $end,
+        string $afterHoursStart, string $afterHoursEnd,
+    ): int {
+        [$startH, $startM] = array_map('intval', explode(':', $afterHoursStart));
+        [$endH, $endM] = array_map('intval', explode(':', $afterHoursEnd));
+        $startMinuteOfDay = $startH * 60 + $startM;
+        $endMinuteOfDay = $endH * 60 + $endM;
+
+        $count = 0;
+        $cursor = $start;
+        while ($cursor < $end) {
+            $minuteOfDay = $cursor->hour * 60 + $cursor->minute;
+            $isAfterHours = $startMinuteOfDay < $endMinuteOfDay
+                ? ($minuteOfDay >= $startMinuteOfDay && $minuteOfDay < $endMinuteOfDay)
+                : ($minuteOfDay >= $startMinuteOfDay || $minuteOfDay < $endMinuteOfDay);
+            if ($isAfterHours) {
+                $count++;
+            }
+            $cursor = $cursor->addHour();
+        }
+        return $count;
     }
 }

@@ -170,3 +170,76 @@ it('applies whole-package weekend markup for full-day booking on weekend', funct
     $breakdown = app(CalculateBookingPrice::class)->execute($draft);
     expect($breakdown->weekend_markup_aed_cents)->toBe(50000);        // 25% × 200000
 });
+
+it('applies after-hours markup for hourly booking starting at 19:00', function () {
+    $facility = Facility::factory()->create();
+    $tier = ServiceTier::factory()->for($facility)->create();
+    FacilityPricing::create([
+        'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 10000,
+    ]);
+    PricingModifier::create([
+        'facility_id' => $facility->id, 'type' => 'after_hours',
+        'percentage' => 25,
+        'after_hours_start' => '18:00', 'after_hours_end' => '09:00',
+    ]);
+
+    // Mon 19:00 -> 21:00 = 2 hours, all after-hours
+    $draft = new BookingDraft(
+        facility_id: $facility->id, service_tier_id: $tier->id, package_type: 'hourly',
+        starts_at: CarbonImmutable::parse('2026-06-08 19:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-08 21:00:00', 'Asia/Dubai'),
+    );
+
+    $breakdown = app(CalculateBookingPrice::class)->execute($draft);
+    expect($breakdown->after_hours_markup_aed_cents)->toBe(5000);   // 25% × 2 × 10000
+});
+
+it('applies pro-rata after-hours markup straddling 18:00 cutover', function () {
+    $facility = Facility::factory()->create();
+    $tier = ServiceTier::factory()->for($facility)->create();
+    FacilityPricing::create([
+        'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 10000,
+    ]);
+    PricingModifier::create([
+        'facility_id' => $facility->id, 'type' => 'after_hours',
+        'percentage' => 25,
+        'after_hours_start' => '18:00', 'after_hours_end' => '09:00',
+    ]);
+
+    // Mon 17:00 -> 20:00 = 1 in-hours hour + 2 after-hours hours
+    $draft = new BookingDraft(
+        facility_id: $facility->id, service_tier_id: $tier->id, package_type: 'hourly',
+        starts_at: CarbonImmutable::parse('2026-06-08 17:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-08 20:00:00', 'Asia/Dubai'),
+    );
+
+    $breakdown = app(CalculateBookingPrice::class)->execute($draft);
+    expect($breakdown->base_aed_cents)->toBe(30000);
+    expect($breakdown->after_hours_markup_aed_cents)->toBe(5000);   // 25% × 2 × 10000
+});
+
+it('handles after-hours window wrapping midnight', function () {
+    $facility = Facility::factory()->create();
+    $tier = ServiceTier::factory()->for($facility)->create();
+    FacilityPricing::create([
+        'facility_id' => $facility->id, 'service_tier_id' => $tier->id,
+        'package_type' => 'hourly', 'hours' => 1, 'price_aed_cents' => 10000,
+    ]);
+    PricingModifier::create([
+        'facility_id' => $facility->id, 'type' => 'after_hours',
+        'percentage' => 25,
+        'after_hours_start' => '18:00', 'after_hours_end' => '09:00',
+    ]);
+
+    // Tue 06:00 -> 10:00 = 3 after-hours (06,07,08) + 1 in-hours (09)
+    $draft = new BookingDraft(
+        facility_id: $facility->id, service_tier_id: $tier->id, package_type: 'hourly',
+        starts_at: CarbonImmutable::parse('2026-06-09 06:00:00', 'Asia/Dubai'),
+        ends_at:   CarbonImmutable::parse('2026-06-09 10:00:00', 'Asia/Dubai'),
+    );
+
+    $breakdown = app(CalculateBookingPrice::class)->execute($draft);
+    expect($breakdown->after_hours_markup_aed_cents)->toBe(7500);   // 25% × 3 × 10000
+});
