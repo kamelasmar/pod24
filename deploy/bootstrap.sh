@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
-# Pod24 Lightsail provisioning — one-time setup on a fresh Ubuntu 22.04 instance.
+# Pod24 Lightsail provisioning — one-time setup on a fresh Ubuntu 24.04 LTS instance.
 #
-# Usage:
-#   ssh ubuntu@<lightsail-ip>
-#   curl -fsSL https://raw.githubusercontent.com/<user>/<repo>/main/deploy/bootstrap.sh | sudo bash -s <git-url>
+# Why 24.04 not 22.04? PHP 8.3 ships natively in 24.04's apt — no Sury, no PPAs,
+# no IPv6 routing problems. If you're stuck on 22.04, switch the Lightsail
+# blueprint and run this on a fresh 24.04 instance.
 #
-# Or after cloning the repo manually:
+# Usage (from a fresh Lightsail Ubuntu 24.04 instance):
+#   curl -fsSL https://raw.githubusercontent.com/<user>/<repo>/main/deploy/bootstrap.sh \
+#     | sudo bash -s <git-url>
+#
+# Or, after cloning manually:
 #   sudo bash deploy/bootstrap.sh <git-url>
 #
 # Idempotent. Re-running is safe.
@@ -23,36 +27,28 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-echo "==> Forcing IPv4 for apt (Lightsail's IPv6 routing to Launchpad is unreliable)..."
-echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-
-echo "==> Removing any stale Ondrej PPA (we use Sury instead — Cloudflare-hosted, reliable)..."
-rm -f /etc/apt/sources.list.d/ondrej-ubuntu-php-jammy.sources \
-      /etc/apt/sources.list.d/ondrej-ubuntu-php-jammy.list \
-      /etc/apt/sources.list.d/ondrej-php-jammy.list
+# Bail out early if we're on a release that doesn't ship PHP 8.3 natively.
+. /etc/os-release 2>/dev/null || true
+if [ "${VERSION_ID:-}" != "24.04" ]; then
+    echo
+    echo "  ⚠  This script targets Ubuntu 24.04 LTS (noble)."
+    echo "     You're on: ${PRETTY_NAME:-unknown}"
+    echo
+    echo "     Re-create the Lightsail instance with the Ubuntu 24.04 LTS blueprint"
+    echo "     and re-run. PHP 8.3 ships natively in 24.04; older Ubuntus need third-"
+    echo "     party PPAs that are unreliable on Lightsail's network."
+    echo
+    exit 1
+fi
 
 echo "==> Updating apt cache..."
 apt-get update -y
 
-echo "==> Installing system packages..."
+echo "==> Installing system packages + PHP 8.3 (native to Ubuntu 24.04)..."
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    lsb-release software-properties-common ca-certificates curl gnupg unzip git \
+    ca-certificates curl gnupg unzip git \
     nginx postgresql postgresql-contrib redis-server \
-    certbot python3-certbot-nginx ufw fail2ban
-
-echo "==> Adding Sury PHP repo..."
-mkdir -p /etc/apt/keyrings
-# Always re-fetch and dearmor — saves us from format ambiguity
-curl -fsSL https://packages.sury.org/php/apt.gpg \
-    | gpg --dearmor --yes -o /etc/apt/keyrings/sury-php.gpg
-echo "deb [signed-by=/etc/apt/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
-    > /etc/apt/sources.list.d/sury-php.list
-# Clean up any older .asc filename if it lingers from a prior run
-rm -f /etc/apt/keyrings/sury-php.asc
-
-echo "==> Installing PHP 8.3..."
-apt-get update -y
-DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    certbot python3-certbot-nginx ufw fail2ban \
     php8.3 php8.3-fpm php8.3-cli php8.3-pgsql php8.3-redis php8.3-mbstring \
     php8.3-xml php8.3-curl php8.3-zip php8.3-gd php8.3-bcmath php8.3-intl \
     php8.3-readline

@@ -5,7 +5,7 @@ Self-hosted Lightsail deploy without Forge. Free aside from Lightsail itself
 
 ## What you'll have at the end
 
-- Ubuntu 22.04 + PHP 8.3 + Postgres 16 + Redis + Nginx
+- Ubuntu 24.04 LTS + PHP 8.3 + Postgres 16 + Redis + Nginx
 - Free Let's Encrypt SSL via certbot
 - Queue worker + scheduler running as systemd units (auto-restart on crash, auto-start on boot)
 - Git pull + `deploy.sh` workflow for updates
@@ -18,7 +18,7 @@ Self-hosted Lightsail deploy without Forge. Free aside from Lightsail itself
 2. **Create instance**
    - Region: `me-central-1` (UAE) or `eu-central-1` (Frankfurt) for the lowest UAE latency
    - Platform: **Linux/Unix**
-   - Blueprint: **OS Only → Ubuntu 22.04 LTS**
+   - Blueprint: **OS Only → Ubuntu 24.04 LTS LTS**
    - Plan: **$24/mo (2 GB RAM, 2 vCPU)** minimum. Bump to $40 if you expect heavy traffic.
    - Identifier: `pod24-prod` (or whatever)
 3. **Networking** tab → IPv4 firewall: ports `22`, `80`, `443` should already be open.
