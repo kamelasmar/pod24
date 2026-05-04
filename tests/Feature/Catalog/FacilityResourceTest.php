@@ -28,6 +28,7 @@ it('can create a facility via Filament', function () {
             'name' => ['en' => 'Pod24 Portable'],
             'description' => ['en' => 'A portable pod.'],
             'is_active' => true,
+            'max_concurrent_per_day' => 1,
             'sort_order' => 0,
         ])
         ->call('create')

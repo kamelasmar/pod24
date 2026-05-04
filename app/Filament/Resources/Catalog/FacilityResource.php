@@ -28,6 +28,9 @@ class FacilityResource extends Resource
             Forms\Components\KeyValue::make('address')->keyLabel('Field')->valueLabel('Value'),
             Forms\Components\SpatieMediaLibraryFileUpload::make('photo')->collection('photo')->image()->imageEditor(),
             Forms\Components\Toggle::make('is_active')->default(true),
+            Forms\Components\TextInput::make('max_concurrent_per_day')
+                ->numeric()->required()->default(1)->minValue(1)
+                ->helperText('Max number of bookings that can run on the same day at this facility.'),
             Forms\Components\TextInput::make('sort_order')->numeric()->default(0),
         ]);
     }
@@ -39,6 +42,7 @@ class FacilityResource extends Resource
                 Tables\Columns\TextColumn::make('slug')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('name.en')->label('Name')->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
+                Tables\Columns\TextColumn::make('max_concurrent_per_day')->label('Capacity'),
                 Tables\Columns\TextColumn::make('sort_order')->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
             ])
