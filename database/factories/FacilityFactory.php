@@ -17,6 +17,7 @@ class FacilityFactory extends Factory
             'description' => ['en' => $this->faker->paragraph()],
             'address' => ['city' => 'Abu Dhabi', 'country' => 'AE'],
             'is_active' => true,
+            'max_concurrent_per_day' => 1,
             'sort_order' => 0,
         ];
     }

@@ -21,3 +21,9 @@ it('stores name as JSON to support multiple locales', function () {
 
     expect($facility->fresh()->getTranslation('name', 'ar'))->toBe('بود٢٤');
 });
+
+it('defaults max_concurrent_per_day to 1', function () {
+    $facility = Facility::factory()->create();
+
+    expect($facility->fresh()->max_concurrent_per_day)->toBe(1);
+});

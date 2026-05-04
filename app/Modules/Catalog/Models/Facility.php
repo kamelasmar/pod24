@@ -16,7 +16,7 @@ class Facility extends Model implements HasMedia
         HasModuleFactory::newFactory insteadof HasFactory;
     }
 
-    protected $fillable = ['slug', 'name', 'description', 'address', 'is_active', 'sort_order'];
+    protected $fillable = ['slug', 'name', 'description', 'address', 'is_active', 'max_concurrent_per_day', 'sort_order'];
 
     public array $translatable = ['name', 'description'];
 
@@ -25,6 +25,7 @@ class Facility extends Model implements HasMedia
         return [
             'address' => 'array',
             'is_active' => 'boolean',
+            'max_concurrent_per_day' => 'integer',
             'sort_order' => 'integer',
         ];
     }

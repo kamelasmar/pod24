@@ -128,8 +128,9 @@ availability_rules            -- weekly recurring open hours
 availability_blackouts        -- one-off closures
   id, facility_id, starts_at, ends_at, reason
 
-availability_capacities       -- single row per facility
-  facility_id PK, max_concurrent_per_day
+-- NOTE: simplification vs. original spec — `availability_capacities` was
+-- collapsed into a `max_concurrent_per_day` column directly on `facilities`.
+-- See § 7 for how capacity is used in availability logic.
 ```
 
 ### 5.3 Bookings
@@ -261,12 +262,12 @@ PriceBreakdown {
 **For a candidate booking window:**
 1. Window must lie inside `availability_rules` for the day-of-week.
 2. Window must not overlap any `availability_blackouts`.
-3. Count of `bookings` overlapping that day with status ∈ {`hold`, `pending_payment`, `confirmed`} must be < `availability_capacities.max_concurrent_per_day` for the facility.
+3. Count of `bookings` overlapping that day with status ∈ {`hold`, `pending_payment`, `confirmed`} must be < `facilities.max_concurrent_per_day` for the facility.
 4. The window must be ≥ now + 24 hours (configurable lead time).
 
 **Concurrency control during checkout:**
 - Step 3 of the booking wizard creates a `BookingHold` row inside a serializable transaction:
-  - `SELECT FOR UPDATE` on the `availability_capacities` row
+  - `SELECT FOR UPDATE` on the `facilities` row (capacity now lives on `facilities.max_concurrent_per_day`)
   - Re-check capacity
   - Insert booking with `status='hold'`, `hold_expires_at = now() + 15 min`
   - Commit
