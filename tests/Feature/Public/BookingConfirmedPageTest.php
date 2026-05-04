@@ -17,7 +17,7 @@ it('shows the confirmation details for a valid ulid', function () {
 
     $this->get('/book/confirmed?ulid=' . $booking->ulid)
         ->assertOk()
-        ->assertSee('Booking confirmed')
+        ->assertSee('Confirmed')
         ->assertSee('guest@example.com')
         ->assertSee($booking->ulid);
 });

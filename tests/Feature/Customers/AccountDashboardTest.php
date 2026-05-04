@@ -32,6 +32,6 @@ it('shows the customer their bookings and balance', function () {
     $this->actingAs($user)
         ->get('/account')
         ->assertOk()
-        ->assertSee('10 hours')
+        ->assertSeeInOrder(['>10<', 'hours'])
         ->assertSee($user->email);
 });

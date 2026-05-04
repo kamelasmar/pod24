@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 
 it('renders the /login page without errors', function () {
-    $this->withoutVite()->get('/login')->assertOk()->assertSee('Sign in to Pod24');
+    $this->withoutVite()->get('/login')->assertOk()->assertSee('Welcome back to Pod24');
 });
 
 it('sends a signed login link to a customer email', function () {
