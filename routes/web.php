@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\MagicLinkController;
 use App\Livewire\AccountDashboard;
 use App\Livewire\BookingConfirmed;
 use App\Livewire\BookingWizard;
+use App\Livewire\HourPackPurchaseList;
 use App\Livewire\MagicLinkRequest;
 use App\Modules\Catalog\Models\Facility;
 use App\Modules\Content\Models\FaqItem;
@@ -36,6 +37,7 @@ Route::get('/login/m/{user}', [MagicLinkController::class, 'consume'])
 Route::post('/logout', function () { auth()->logout(); return redirect('/'); })->name('logout');
 
 Route::get('/account', AccountDashboard::class)->middleware('auth')->name('account.dashboard');
+Route::get('/account/packs', HourPackPurchaseList::class)->middleware('auth')->name('account.packs');
 
 Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handle'])
     ->name('stripe.webhook');
