@@ -9,6 +9,7 @@
         "php": "^8.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "spatie/laravel-medialibrary": "^11.0",
         "spatie/laravel-permission": "^6.25",
         "spatie/laravel-translatable": "^6.14"
     },
