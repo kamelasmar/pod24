@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolesAndPermissionsSeeder::class,
+            Pod24ContentSeeder::class,
             Pod24CatalogSeeder::class,
         ]);
     }
